@@ -1,52 +1,8 @@
 import React, { useState } from 'react';
 import './css/StraEthForm.css';
 import { FormControl, InputLabel, MenuItem, Select, Slider, TextField, Typography } from '@material-ui/core';
-import { DatePicker } from '@mui/x-date-pickers';
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
-import { Stack } from '@mui/material';
+import {leverageFactorMarks, timeframeMarks} from './constants'
 
-const marks = [
-  {
-    value: 1,
-    label: '1m',
-    timeFrame: 1 * 60
-  },
-  {
-    value: 2,
-    label: '5m',
-    timeFrame: 5 * 60
-  },
-  {
-    value: 3,
-    label: '10m',
-    timeFrame: 10 * 60
-  },
-  {
-    value: 4,
-    label: '30m',
-    timeFrame: 30 * 60
-  },
-  {
-    value: 5,
-    label: '1hrs',
-    timeFrame: 60 * 60
-  },
-  {
-    value: 6,
-    label: '5hrs',
-    timeFrame: 60 * 60 * 5
-  },
-  {
-    value: 7,
-    label: '10hrs',
-    timeFrame: 60 * 60 * 10
-  },
-  {
-    value: 8,
-    label: '1d',
-    timeFrame: 60 * 60 * 24
-  },
-];
 
 
 
@@ -55,13 +11,23 @@ function StraEthForm() {
   const [asset, setAsset] = useState('')
   const [date, setDate] = useState('')
   const [timeFrame, setTimeframe] = useState(0)
+  const [leverageFactor, setleverageFactor] = useState(0)
+  const [windowSize, setWindowSize] = useState(0)
+  const [assetAmount, setAssetAmount] = useState('')
 
   const handleSetTimeframe = (v: any) => {
-    const tframe = marks.filter((item: any) => item.value === v)[0].timeFrame
-    console.log('tframe', tframe)
+    const tframe = timeframeMarks.filter((item: any) => item.value === v)[0].timeFrame
     setTimeframe(tframe)
   }
-
+  const handleSetLeverageFactor = (v: any) => {
+    const lev = leverageFactorMarks.filter((item: any) => item.value === v)[0].leverage
+    console.log('lev', lev)
+    setleverageFactor(lev)
+  }
+  
+  const handleSetWindowSize = (v:any)=> {
+    setleverageFactor(v)
+  }
 
   return (
     <div className="form-group">
@@ -92,6 +58,7 @@ function StraEthForm() {
           label="Amount"
           variant="outlined"
           type='number'
+          onChange={(e)=> setAssetAmount(e.target.value)}
         />
       </div>
       <div className='form-component'>
@@ -119,34 +86,42 @@ function StraEthForm() {
           Volume
         </Typography>
         <Slider
-          aria-label="Timeframe"
+          aria-label="timeframe"
           defaultValue={1}
-          // getAriaValueText={ valuetext}
           valueLabelDisplay="auto"
           step={1}
-          marks={marks}
+          marks={timeframeMarks}
           min={1}
           max={8}
           onChange={(_, v) => handleSetTimeframe(v)}
 
         />
       </div>
+      {/* leverage factor */}
       <div className='form-component'>
-
         <Typography id="input-slider" >
           Leverage Factor
         </Typography>
         <Slider
-          aria-label="Timeframe"
+          aria-label="leverage-factor"
           defaultValue={1}
-          // getAriaValueText={ valuetext}
           valueLabelDisplay="auto"
           step={1}
-          marks={marks}
+          marks={leverageFactorMarks}
           min={1}
-          max={8}
-          onChange={(_, v) => handleSetTimeframe(v)}
+          max={4}
+          onChange={(_, v) => handleSetLeverageFactor(v)}
+        />
+      </div>
 
+      {/* window size */}
+      <div className='form-component'>
+        <Typography id="input-slider" >
+          Window Size
+        </Typography>
+        <Slider
+          aria-label="window-size"
+          onChange={(_, v) => handleSetWindowSize(v)}
         />
       </div>
 
