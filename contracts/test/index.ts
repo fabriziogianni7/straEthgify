@@ -7,7 +7,7 @@ describe("StrategyManager", function () {
   const DATA_COMPRESSOR_ADDRESS = '0xcbd0ae32a74c7cbeb774a9a07ec744f4f53afd6d'
   const USDC_ADDRESS = '0x31EeB2d0F9B6fD8642914aB10F4dD473677D80df'
   const USDC_AMOUNT = '500000000'
-  const TIME_FRAME = 5000
+  const TIME_FRAME = 3600
   const WINDOW_SIZE = 100
   const CREDIT_MANAGER_ADDRESS_USDC = '0xdbad1361d9a03b81be8d3a54ef0dc9e39a1ba5b3'
   const YEARN_VAULT = '0x7de5c945692858cef922dad3979a1b8bfa77a9b4'

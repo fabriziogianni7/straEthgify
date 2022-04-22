@@ -16,6 +16,8 @@ contract StrategyManager {
         address userVault;
         uint256 timeFrame;
         uint256 windowSize;
+        address riskyAsset;
+        address collateralAsset;
     }
     mapping(address => User) private userVaults;
     address[] users;
@@ -64,7 +66,9 @@ contract StrategyManager {
             msg.sender,
             userVaultAddress,
             _timeFrame,
-            _windowSize
+            _windowSize,
+            _collateralAsset,
+            _riskyAsset
         );
 
         users.push(msg.sender);
@@ -91,12 +95,14 @@ contract StrategyManager {
             address,
             address,
             uint256,
-            uint256
+            uint256,
+            address,
+            address
         )
     {
         User memory user = userVaults[_user];
 
-        return (user.addr, user.userVault, user.timeFrame, user.windowSize);
+        return (user.addr, user.userVault, user.timeFrame, user.windowSize, user.riskyAsset, user.collateralAsset);
     }
 
     function getAllUsers() public view returns (address[] memory) {
