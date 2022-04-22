@@ -2,11 +2,14 @@ pragma solidity ^0.8.0;
 
 import {IAddressProvider} from "./interfaces/IAddressProvider.sol";
 import {IAddressProvider} from "./interfaces/IAddressProvider.sol";
+import {IDataCompressor} from "./interfaces/IDataCompressor.sol";
 import {UserVault} from "./UserVault.sol";
+import {DataTypes} from "./libraries/data/Types.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 
 contract StrategyManager {
     IAddressProvider private addressProvider;
+    IDataCompressor private dataCompressor;
 
     struct User {
         address addr;
@@ -20,8 +23,7 @@ contract StrategyManager {
     event StrategyOpened(
         address indexed user,
         address indexed collateral,
-        uint256 amount,
-        address creditManager
+        uint256 amount
     );
 
     event Rebalance(
@@ -31,8 +33,10 @@ contract StrategyManager {
         address asset
     );
 
-    constructor(address _geabboxAddressProvider) {
+    constructor(address _geabboxAddressProvider, address _dataCompressorAddress)
+    {
         addressProvider = IAddressProvider(_geabboxAddressProvider);
+        dataCompressor = IDataCompressor(_dataCompressorAddress);
     }
 
     function createStrategy(
@@ -40,15 +44,18 @@ contract StrategyManager {
         uint256 _timeFrame,
         uint256 _windowSize,
         uint256 _amount,
-        address _asset,
+        address _collateralAsset,
+        address _riskyAsset,
         address _univ2Adapter,
         address _yearnVault,
         uint256 _leverageFactor
     ) public {
         UserVault userVault = new UserVault(
             _creditManager,
+            address(dataCompressor),
             _univ2Adapter,
-            _asset,
+            _collateralAsset,
+            _riskyAsset,
             _yearnVault,
             _leverageFactor
         );
@@ -60,12 +67,14 @@ contract StrategyManager {
             _windowSize
         );
 
-        IERC20Upgradeable token = ERC20Upgradeable(_asset);
+        users.push(msg.sender);
+
+        IERC20Upgradeable token = ERC20Upgradeable(_collateralAsset);
         token.transferFrom(msg.sender, userVaultAddress, _amount);
         userVault.openStrategy(_amount);
         userVaults[msg.sender] = user;
 
-        emit StrategyOpened(msg.sender, _asset, _amount, _creditManager);
+        emit StrategyOpened(msg.sender, _collateralAsset, _amount);
     }
 
     function rebalance(address _userVaultAddress, uint256 _direction) public {
@@ -92,5 +101,16 @@ contract StrategyManager {
 
     function getAllUsers() public view returns (address[] memory) {
         return users;
+    }
+
+    function getCreditAccountData(address _user)
+        public
+        view
+        returns (DataTypes.TokenBalance[] memory)
+    {
+        User memory user = userVaults[_user];
+       return UserVault(
+            user.userVault
+        ).getCreditAccountData();
     }
 }
