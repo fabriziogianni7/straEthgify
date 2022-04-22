@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import './css/StraEthForm.css';
 import { Button, ButtonGroup, FormControl, InputLabel, MenuItem, Select, Slider, TextField, Typography } from '@material-ui/core';
 import { leverageFactorMarks, timeframeMarks } from './constants'
-import { GeneralContext } from '../context';
+import { GeneralContext } from '../../context';
 
 
 
@@ -34,7 +34,7 @@ function StraEthForm() {
   return (
     <div className="form-group">
       {/* <Stack spacing={4}> */}
-
+      <Typography variant="h5" style={{textAlign:"left"}} color='primary'>Select Strategy Parameters</Typography>
       <div className='form-component'>
 
         {/* asset */}

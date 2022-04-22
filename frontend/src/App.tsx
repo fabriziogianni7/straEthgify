@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
-import StraEthForm from './components/StraEthForm';
-import StraEthChart from './components/StraEthChart';
+import StraEthForm from './components/form-component/StraEthForm';
+import StraEthChart from './components/linechart-component/StraEthChart';
 import { GeneralContextProvider } from './context/GeneralContext';
 
 function App() {
@@ -10,7 +10,6 @@ function App() {
       <GeneralContextProvider>
         <div>
           <StraEthForm />
-
         </div>
         <div>
           <StraEthChart />
