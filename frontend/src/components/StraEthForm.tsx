@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './css/StraEthForm.css';
 import { FormControl, InputLabel, MenuItem, Select, Slider, TextField, Typography } from '@material-ui/core';
-import {leverageFactorMarks, timeframeMarks} from './constants'
+import { leverageFactorMarks, timeframeMarks } from './constants'
 
 
 
@@ -24,8 +24,8 @@ function StraEthForm() {
     console.log('lev', lev)
     setleverageFactor(lev)
   }
-  
-  const handleSetWindowSize = (v:any)=> {
+
+  const handleSetWindowSize = (v: any) => {
     setleverageFactor(v)
   }
 
@@ -54,16 +54,18 @@ function StraEthForm() {
       <div className='form-component'>
         {/* starting amount */}
         <TextField
+          fullWidth
           id="outlined-basic"
           label="Amount"
           variant="outlined"
           type='number'
-          onChange={(e)=> setAssetAmount(e.target.value)}
+          onChange={(e) => setAssetAmount(e.target.value)}
         />
       </div>
       <div className='form-component'>
         {/* date picker */}
         <TextField
+          fullWidth
           id="date"
           label="Start date of backtest"
           type="date"
