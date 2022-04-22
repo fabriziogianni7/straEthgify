@@ -5,18 +5,21 @@ import {IUniV2Adapter} from "./interfaces/IUniV2Adapter.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import {DataTypes} from "./libraries/data/Types.sol";
 import {IDataCompressor} from "./interfaces/IDataCompressor.sol";
+import {IYearnV2} from "./interfaces/IYearnV2.sol";
+import "hardhat/console.sol";
 
 contract UserVault {
     // 0: Started, 1: Risky, 2: stable
     uint256 status = 0;
     address collateralAsset;
     address riskyAsset;
-    address yearVault;
+    address yearVaultAddress;
     address dataCompressorAddress;
     uint256 leverageFactor;
     ICreditManager private creditManager;
     IUniV2Adapter private uniV2Adapter;
     IDataCompressor private dataCompressor;
+    IYearnV2 private yearnV2Adapter;
 
     constructor(
         address _creditManagerAddress,
@@ -24,16 +27,17 @@ contract UserVault {
         address _univ2Adapter,
         address _collateralAsset,
         address _riskyAsset,
-        address _yearnVault,
+        address _yearnVaultAddress,
         uint256 _leverageFactor
     ) {
         collateralAsset = _collateralAsset;
-        yearVault = _yearnVault;
+        yearVaultAddress = _yearnVaultAddress;
         riskyAsset = _riskyAsset;
         leverageFactor = _leverageFactor;
         creditManager = ICreditManager(_creditManagerAddress);
         uniV2Adapter = IUniV2Adapter(_univ2Adapter);
         dataCompressor = IDataCompressor(_dataCompressorAddress);
+        yearnV2Adapter = IYearnV2(_yearnVaultAddress);
     }
 
     function openStrategy(uint256 _amount) public {
@@ -93,7 +97,7 @@ contract UserVault {
         return data.balances;
     }
 
-    function getTokenAmounts() private view returns(uint256, uint256){
+    function getTokenAmounts() private view returns (uint256, uint256) {
         uint256 stable;
         uint256 risky;
         DataTypes.TokenBalance[] memory tokenBalances = getCreditAccountData();
@@ -108,7 +112,7 @@ contract UserVault {
             }
         }
 
-        return(stable, risky);
+        return (stable, risky);
     }
 
     function _goRisky()
@@ -146,6 +150,29 @@ contract UserVault {
             address asset
         )
     {
+        address[] memory path = new address[](2);
+
+        //TODO: Move this to vars on contract creation
+        path[0] = riskyAsset;
+        path[1] = collateralAsset;
+
+        (, uint256 riskyAmount) = getTokenAmounts();
+
+        uint256[] memory amounts = _swap(
+            riskyAmount,
+            0, //TODO: Calculate amountOutMin
+            path,
+            address(this),
+            1750391703 //TODO: Calculate Deadline
+        );
+
+        ERC20Upgradeable(collateralAsset).approve(
+            address(yearnV2Adapter),
+            amounts[1]
+        );
+
+        yearnV2Adapter.deposit(amounts[1], address(this));
+
         return (0, 1, address(this));
     }
 }

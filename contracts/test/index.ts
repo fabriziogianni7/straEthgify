@@ -10,7 +10,7 @@ describe("StrategyManager", function () {
   const TIME_FRAME = 5000
   const WINDOW_SIZE = 100
   const CREDIT_MANAGER_ADDRESS_USDC = '0xdbad1361d9a03b81be8d3a54ef0dc9e39a1ba5b3'
-  const YEARN_VAULT = '0xdbad1361d9a03b81be8d3a54ef0dc9e39a1ba5b3'
+  const YEARN_VAULT = '0x7de5c945692858cef922dad3979a1b8bfa77a9b4'
   const LEVERAGE_FACTOR = 2
   const UNI_V2_USDC_ADAPTER = '0x37c61fD2AFE4134d6020188C59Efdea3d143e28a'
   const WETH_ADDRESS = '0xd0A1E359811322d97991E03f863a0C30C2cF029C'
@@ -50,6 +50,18 @@ describe("StrategyManager", function () {
     await expect(strategyManager.connect(owner).rebalance(
       userVaultAddress,
       1
+    )).to.emit(strategyManager, 'Rebalance')
+  });
+
+
+  it("Should execute a rebalance to go stable", async function () {
+    const [owner] = await ethers.getSigners();
+    const strategyManagerInstance = strategyManager.connect(owner)
+    const userVault = await strategyManagerInstance.getUserVault(owner.address)
+    const userVaultAddress = userVault[1]
+    await expect(strategyManager.connect(owner).rebalance(
+      userVaultAddress,
+      0
     )).to.emit(strategyManager, 'Rebalance')
   });
 
