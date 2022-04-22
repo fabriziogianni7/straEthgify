@@ -36,4 +36,55 @@ contract UserVault {
             0
         );
     }
+
+    function rebalance(uint256 _direction)
+        public
+        returns (
+            uint256 direction,
+            uint256 amount,
+            address asset
+        )
+    {
+        _direction == 0
+            ? (direction, amount, asset) = _goStable()
+            : (direction, amount, asset) = _goRisky();
+
+        return (direction, amount, asset);
+    }
+
+    function _goRisky()
+        private
+        returns (
+            uint256 direction,
+            uint256 amount,
+            address asset
+        )
+    {
+        address[] memory path = new address[](2);
+
+        //TODO: Move this to vars on contract creation
+        path[0] = 0x31EeB2d0F9B6fD8642914aB10F4dD473677D80df; //USDC
+        path[1] = 0xd0A1E359811322d97991E03f863a0C30C2cF029C; //WETH
+
+        uint256[] memory amounts = uniV2Adapter.swapExactTokensForTokens(
+            10, //TODO: Create a function to get USDC balance on credit manager
+            0, //TODO: Calculate amountOutMin
+            path,
+            address(this),
+            1750391703 //TODO: Calculate Deadline
+        );
+
+        return (1, amounts[1], address(this));
+    }
+
+    function _goStable()
+        private
+        returns (
+            uint256 direction,
+            uint256 amount,
+            address asset
+        )
+    {
+        return (0, 1, address(this));
+    }
 }
