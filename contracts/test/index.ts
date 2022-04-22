@@ -4,6 +4,7 @@ import { ethers } from "hardhat";
 describe("StrategyManager", function () {
   let strategyManager: any;
   const GEARBOX_ADDRESS_PROVIDER = '0xcF64698AFF7E5f27A11dff868AF228653ba53be0'
+  const DATA_COMPRESSOR_ADDRESS = '0xcbd0ae32a74c7cbeb774a9a07ec744f4f53afd6d'
   const USDC_ADDRESS = '0x31EeB2d0F9B6fD8642914aB10F4dD473677D80df'
   const USDC_AMOUNT = '500000000'
   const TIME_FRAME = 5000
@@ -17,7 +18,8 @@ describe("StrategyManager", function () {
   it("Should deploy the contract", async function () {
     const StrategyManager = await ethers.getContractFactory("StrategyManager");
     strategyManager = await StrategyManager.deploy(
-      GEARBOX_ADDRESS_PROVIDER
+      GEARBOX_ADDRESS_PROVIDER,
+      DATA_COMPRESSOR_ADDRESS
     );
     await strategyManager.deployed();
   });
@@ -33,6 +35,7 @@ describe("StrategyManager", function () {
       WINDOW_SIZE,
       USDC_AMOUNT,
       USDC_ADDRESS,
+      WETH_ADDRESS,
       UNI_V2_USDC_ADAPTER,
       YEARN_VAULT,
       LEVERAGE_FACTOR
