@@ -1,0 +1,13 @@
+.form-group{
+  display:flex;
+  flex-direction: column;
+  background-color: rgba(240, 255, 255, 0.555);
+  width: 50vh;
+  padding: 20px
+}
+
+.form-component{
+  padding:10px;
+  color: rgba(0, 0, 0, 0.267);
+  text-align: left;
+}
