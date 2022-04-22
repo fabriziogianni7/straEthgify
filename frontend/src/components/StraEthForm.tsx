@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './css/StraEthForm.css';
-import { FormControl, InputLabel, MenuItem, Select, Slider, TextField, Typography } from '@material-ui/core';
+import { Button, ButtonGroup, FormControl, InputLabel, MenuItem, Select, Slider, TextField, Typography } from '@material-ui/core';
 import { leverageFactorMarks, timeframeMarks } from './constants'
 
 
@@ -126,6 +126,27 @@ function StraEthForm() {
           onChange={(_, v) => handleSetWindowSize(v)}
         />
       </div>
+      <ButtonGroup
+        orientation="vertical"
+        aria-label="vertical contained button group"
+        variant="contained"
+      >
+        <Button
+          id='test-strategy-button'
+          size="medium"
+          onClick={()=>alert('TODO: test strategy')}
+          >Test Strategy
+        </Button>
+        <Button
+          id='deploy-strategy-button'
+          size="medium"
+          onClick={()=>alert('TODO: deploy strategy')}
+          >Deploy Strategy
+        </Button>
+      </ButtonGroup>
+
+
+
 
       {/* </Stack> */}
       {/* </FormControl> */}

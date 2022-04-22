@@ -11,3 +11,12 @@
   color: rgba(0, 0, 0, 0.267);
   text-align: left;
 }
+
+#test-strategy-button{
+  background-color: #0e384b;
+  color:lightblue
+}
+#deploy-strategy-button{
+  background-color: #48829c;
+  color:lightblue
+}
