@@ -24,6 +24,13 @@ contract StrategyManager {
         address creditManager
     );
 
+    event Rebalance(
+        address indexed user,
+        uint256 direction,
+        uint256 amount,
+        address asset
+    );
+
     constructor(address _geabboxAddressProvider) {
         addressProvider = IAddressProvider(_geabboxAddressProvider);
     }
@@ -61,10 +68,16 @@ contract StrategyManager {
         emit StrategyOpened(msg.sender, _asset, _amount, _creditManager);
     }
 
-    function rebalance(address _userVault, uint256 _direction) public {}
+    function rebalance(address _userVaultAddress, uint256 _direction) public {
+        (uint256 direction, uint256 amount, address asset) = UserVault(
+            _userVaultAddress
+        ).rebalance(_direction);
+        emit Rebalance(_userVaultAddress, direction, amount, asset);
+    }
 
     function getUserVault(address _user)
         public
+        view
         returns (
             address,
             address,
