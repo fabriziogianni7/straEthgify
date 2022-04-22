@@ -2,17 +2,20 @@ import React from 'react';
 import './App.css';
 import StraEthForm from './components/StraEthForm';
 import StraEthChart from './components/StraEthChart';
+import { GeneralContextProvider } from './context/GeneralContext';
 
 function App() {
   return (
     <div className="App">
-      <div>
-        <StraEthForm/>
+      <GeneralContextProvider>
+        <div>
+          <StraEthForm />
 
-      </div>
-      <div>
-      <StraEthChart/>
-      </div>
+        </div>
+        <div>
+          <StraEthChart />
+        </div>
+      </GeneralContextProvider>
     </div>
   );
 }

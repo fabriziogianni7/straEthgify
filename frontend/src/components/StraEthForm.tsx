@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import './css/StraEthForm.css';
 import { Button, ButtonGroup, FormControl, InputLabel, MenuItem, Select, Slider, TextField, Typography } from '@material-ui/core';
 import { leverageFactorMarks, timeframeMarks } from './constants'
+import { GeneralContext } from '../context';
 
 
 
 
 function StraEthForm() {
 
+  const context = useContext(GeneralContext)
   const [asset, setAsset] = useState('')
   const [date, setDate] = useState('')
   const [timeFrame, setTimeframe] = useState(0)
@@ -140,7 +142,7 @@ function StraEthForm() {
         <Button
           id='deploy-strategy-button'
           size="medium"
-          onClick={()=>alert('TODO: deploy strategy')}
+          onClick={()=>context.test()}
           >Deploy Strategy
         </Button>
       </ButtonGroup>
