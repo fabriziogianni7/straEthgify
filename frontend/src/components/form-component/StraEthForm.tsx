@@ -3,6 +3,17 @@ import './css/StraEthForm.css';
 import { Button, ButtonGroup, FormControl, InputLabel, MenuItem, Select, Slider, TextField, Typography } from '@material-ui/core';
 import { leverageFactorMarks, timeframeMarks } from './constants'
 import { GeneralContext } from '../../context';
+import {
+  CREDIT_MANAGER_ADDRESS_USDC,
+  TIME_FRAME,
+  WINDOW_SIZE,
+  USDC_AMOUNT,
+  USDC_ADDRESS,
+  WETH_ADDRESS,
+  UNI_V2_USDC_ADAPTER,
+  YEARN_VAULT,
+  LEVERAGE_FACTOR
+} from '../../config'
 
 
 
@@ -34,7 +45,7 @@ function StraEthForm() {
   return (
     <div className="form-group">
       {/* <Stack spacing={4}> */}
-      <Typography variant="h5" style={{textAlign:"left"}} color='primary'>Select Strategy Parameters</Typography>
+      <Typography variant="h5" style={{ textAlign: "left" }} color='primary'>Select Strategy Parameters</Typography>
       <div className='form-component'>
 
         {/* asset */}
@@ -136,22 +147,25 @@ function StraEthForm() {
         <Button
           id='test-strategy-button'
           size="medium"
-          onClick={()=>alert('TODO: test strategy')}
-          >Test Strategy
+          onClick={() => alert('TODO: test strategy')}
+        >Test Strategy
         </Button>
         <Button
           id='deploy-strategy-button'
           size="medium"
-          onClick={()=>context.test()}
-          >Deploy Strategy
+          onClick={async () => await context.createStrategy(CREDIT_MANAGER_ADDRESS_USDC,
+            TIME_FRAME,
+            WINDOW_SIZE,
+            USDC_AMOUNT,
+            USDC_ADDRESS,
+            WETH_ADDRESS,
+            UNI_V2_USDC_ADAPTER,
+            YEARN_VAULT,
+            LEVERAGE_FACTOR)}
+        >Deploy Strategy
         </Button>
       </ButtonGroup>
 
-
-
-
-      {/* </Stack> */}
-      {/* </FormControl> */}
 
     </div>
   );
