@@ -59,6 +59,7 @@ describe("StrategyManager", function () {
     const [owner] = await ethers.getSigners();
     const strategyManagerInstance = strategyManager.connect(owner)
     const users = await strategyManagerInstance.getAllUsers()
+    expect(users.length).to.equal(1)
   });
 
 
