@@ -4,8 +4,10 @@ import {Button, Typography} from '@material-ui/core'
 import { GeneralContext} from '../../context';
 
 function StraNavbar() {
-const {accountConnected, connectMetamask} = useContext(GeneralContext);
-useEffect(()=> console.log(accountConnected), [])
+const {account, connectMetamask} = useContext(GeneralContext);
+
+
+useEffect(()=> console.log('account connected', account), [])
   return (
 
     <div className='navbar'>
@@ -14,7 +16,7 @@ useEffect(()=> console.log(accountConnected), [])
           id='connect-wallet-button'
           size='medium'
           onClick={async()=>await  connectMetamask()}
-          >{accountConnected? accountConnected[0] : 'Connect Wallet'}
+          >{account? account : 'Connect Wallet'}
         </Button>
     </div>
     

@@ -1,9 +1,11 @@
 import { useEffect, useMemo } from "react";
 import { GeneralContext } from "./index"
 import strategyManagerJson from '../contracts/StrategyManager.json'
+import usdcContractJson from '../contracts/USDCContract.json'
 import Web3 from 'web3';
 import { AbiItem } from "web3-utils";
-import { STRATEGY_CONTRACT_ADDRESS } from "../config";
+import { STRATEGY_CONTRACT_ADDRESS, USDC_ADDRESS, USDC_AMOUNT } from "../config";
+import { createTextSpanFromBounds } from "typescript";
 
 declare var window: any
 
@@ -23,14 +25,48 @@ export function GeneralContextProvider(props: any) {
             }
             return false
         },
-        accountConnected: '',
+        account: '',
+        getAccounts: async () => {
+            console.log((await window.ethereum.request({ method: 'eth_requestAccounts' }))[0])
+            ctx.account = (await window.ethereum.request({ method: 'eth_requestAccounts' }))[0]
+        },
         connectMetamask: async () => {
             console.log('inside metamask')
-            ctx.accountConnected = await window.ethereum.request({ method: 'eth_requestAccounts' })
+            await window.ethereum.request({ method: 'eth_requestAccounts' })
             // return ctx.accountConnected
-            console.log("cccc", ctx.accountConnected)
+            // console.log("cccc", ctx.accountConnected)
         },
         strategyManagerContract: () => new web3.eth.Contract(strategyManagerJson.abi as AbiItem[], STRATEGY_CONTRACT_ADDRESS),
+        approveStrategyContract: async () => {
+            // console.log(await ctx.strategyManagerContract())
+
+            const usdcContract = new web3.eth.Contract(usdcContractJson as AbiItem[], USDC_ADDRESS)
+
+            const tx = await usdcContract.methods.approve(STRATEGY_CONTRACT_ADDRESS, USDC_AMOUNT)
+
+            const gas = await web3.eth.estimateGas({
+                to: USDC_ADDRESS,
+                data: tx.encodeABI()
+            })
+
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            console.log(accounts[0])
+            // console.log('ctx.accountConnected()', (ctx.account))
+            const transactionParameters = {
+                gas: String(gas), // customizable by user during MetaMask confirmation.
+                to: USDC_ADDRESS,  // Required except during contract publications.
+                from: accounts[0], // must match user's active address.
+                data: tx.encodeABI(), // Optional, but used for defining smart contract creation and interaction.
+            };
+
+            const txHash = await window.ethereum.request({
+                method: 'eth_sendTransaction',
+                params: [transactionParameters],
+            });
+            console.log("txHash", txHash)
+
+
+        },
         createStrategy: async (
             creditManagerAddress: any,
             timeframe: any,
@@ -42,6 +78,7 @@ export function GeneralContextProvider(props: any) {
             yearnVault: any,
             leverageFactor: any,
         ) => {
+            await ctx.approveStrategyContract()
             const tx = await ctx.strategyManagerContract().methods.createStrategy(
                 creditManagerAddress,
                 timeframe,
@@ -102,8 +139,8 @@ export function GeneralContextProvider(props: any) {
 
     }
 
-    useMemo(() => {
-        // ctx.checkMetamask()
+    useMemo(async () => {
+        await ctx.getAccounts()
 
         // console.log("ABI", strategyManagerJson.abi)
 

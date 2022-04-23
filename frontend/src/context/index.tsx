@@ -6,8 +6,10 @@ export const GeneralContext = React.createContext({
     callDeployStrategy: async (params: any)=>{},
     checkMetamask: () =>{},
     connectMetamask: async () =>{},
-    accountConnected: '' as string,
+    account: '' as string,
+    getAccounts: async () =>{},
     strategyManagerContract:()=> {},
+    approveStrategyContract:async () =>{},
     createStrategy: async (
         creditManagerAddress:any,
         timeframe:any,
