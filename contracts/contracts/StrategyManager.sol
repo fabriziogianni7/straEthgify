@@ -67,8 +67,8 @@ contract StrategyManager {
             userVaultAddress,
             _timeFrame,
             _windowSize,
-            _collateralAsset,
-            _riskyAsset
+            _riskyAsset,
+            _collateralAsset
         );
 
         users.push(msg.sender);
