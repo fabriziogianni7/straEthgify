@@ -1,11 +1,11 @@
 import React, { useContext, useEffect } from "react";
 import './css/StraNavbar.css'
 import {Button, Typography} from '@material-ui/core'
-import { GeneralContext } from '../../context';
+import { GeneralContext} from '../../context';
 
 function StraNavbar() {
-const ctx = useContext(GeneralContext);
-useEffect(()=> console.log(ctx.accountConnected), [])
+const {accountConnected, connectMetamask} = useContext(GeneralContext);
+useEffect(()=> console.log(accountConnected), [])
   return (
 
     <div className='navbar'>
@@ -13,8 +13,8 @@ useEffect(()=> console.log(ctx.accountConnected), [])
      <Button
           id='connect-wallet-button'
           size='medium'
-          onClick={async()=>await  ctx.connectMetamask()}
-          >{ctx.accountConnected? ctx.accountConnected : 'Connect Wallet'}
+          onClick={async()=>await  connectMetamask()}
+          >{accountConnected? accountConnected[0] : 'Connect Wallet'}
         </Button>
     </div>
     
