@@ -11,11 +11,11 @@ declare var window: any
 export function GeneralContextProvider(props: any) {
     const web3 = new Web3(window.ethereum)
     const [account, setAccount] = useState('')
-    const [dateBacktest, setDateBacktest] = useState('')
+    const [dateBacktest, setDateBacktest] = useState('2021-04-22')
     const [timeFrameBacktest, setTimeFrameBacktest] = useState(0)
     const [leverageFactor, setLeverageFactor] = useState(0)
-    const [windowSize, setWindowSize] = useState(0)
-    const [assetAmount, setAssetAmount] = useState(0)
+    const [windowSize, setWindowSize] = useState(10)
+    const [assetAmount, setAssetAmount] = useState(10000)
     const [assetBacktest, setAssetBacktest] = useState('bitcoin')
     const ctx = {
         test: () => alert("ctx is ok"),

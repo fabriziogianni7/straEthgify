@@ -16,7 +16,7 @@ import {
 function StraEthForm() {
 
   const context = useContext(GeneralContext)
-  const [asset, setAsset] = useState('')
+  const [asset, setAsset] = useState('0xE36bC5d8b689AD6d80e78c3e736670e80d4b329D')
 
   const handleSetTimeframe = (v: any) => {
     const tframe = timeframeMarks.filter((item: any) => item.value === v)[0].timeFrame
@@ -66,8 +66,9 @@ function StraEthForm() {
           label="Amount"
           variant="outlined"
           type='number'
+          defaultValue={10000}
           onChange={(e) => {
-            const val = (Number(e.target.value) * 1000000)
+            const val = Number(e.target.value)
             context.setAssetAmount(val)
           }}
         />
@@ -154,7 +155,7 @@ function StraEthForm() {
           onClick={async () => await context.createStrategy(CREDIT_MANAGER_ADDRESS_USDC,
             context.timeFrameBacktest,
             context.windowSize,
-            context.assetAmount,
+            context.assetAmount * 1000000,
             USDC_ADDRESS,
             asset,
             UNI_V2_USDC_ADAPTER,
