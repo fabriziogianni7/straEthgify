@@ -97,12 +97,6 @@ export function GeneralContextProvider(props: any) {
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             console.log(accounts[0])
 
-
-            const gas = await web3.eth.estimateGas({
-                from: accounts[0],
-                to: STRATEGY_CONTRACT_ADDRESS,
-                data: tx.encodeABI()
-            })
             const transactionParameters = {
                 // gas: String(gas), // customizable by user during MetaMask confirmation.
                 to: STRATEGY_CONTRACT_ADDRESS,  // Required except during contract publications.
