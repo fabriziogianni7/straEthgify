@@ -17,6 +17,7 @@ export function GeneralContextProvider(props: any) {
     const [windowSize, setWindowSize] = useState(10)
     const [assetAmount, setAssetAmount] = useState(10000)
     const [assetBacktest, setAssetBacktest] = useState('bitcoin')
+    const [creditAccountData, setCreditAccountData] = useState('')
     const ctx = {
         test: () => alert("ctx is ok"),
         callTestStrategy: async (testParams: any) => alert("todo: call test strategy api call"),
@@ -41,6 +42,7 @@ export function GeneralContextProvider(props: any) {
         setWindowSize,
         setAssetAmount,
         setAssetBacktest,
+        setCreditAccountData,
         getAccounts: async () => {
             console.log((await window.ethereum.request({ method: 'eth_requestAccounts' }))[0])
             ctx.account = (await window.ethereum.request({ method: 'eth_requestAccounts' }))[0]
@@ -65,16 +67,19 @@ export function GeneralContextProvider(props: any) {
             })
 
             const transactionParameters = {
-                gas: String(gas), // customizable by user during MetaMask confirmation.
+                // gas: '100000', // customizable by user during MetaMask confirmation.
+                // gas: String(gas), // customizable by user during MetaMask confirmation.
                 to: USDC_ADDRESS,  // Required except during contract publications.
                 from: accounts[0], // must match user's active address.
                 data: tx.encodeABI(), // Optional, but used for defining smart contract creation and interaction.
+                amount: web3.utils.toWei('1', "ether")
             };
 
             const txHash = await window.ethereum.request({
                 method: 'eth_sendTransaction',
                 params: [transactionParameters],
             });
+            await ctx.waitTransactionByMined(txHash)
             console.log("txHash", txHash)
         },
         createStrategy: async (
@@ -101,14 +106,25 @@ export function GeneralContextProvider(props: any) {
                 leverageFactor,
             )
 
-            console.log('which one is the transaction?', tx)
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             console.log(accounts[0])
 
+            const gas = web3.eth.estimateGas({
+                from: accounts[0],
+                to: STRATEGY_CONTRACT_ADDRESS,
+                data: tx.encodeABI()
+
+            })
+
+
             const transactionParameters = {
+                // gas: String(gas), GASLIMIT: 30999
+                gasLimit:7920027,
+                gasPrice:'100',
                 to: STRATEGY_CONTRACT_ADDRESS,  // Required except during contract publications.
                 from: accounts[0], // must match user's active address.
                 data: tx.encodeABI(), // Optional, but used for defining smart contract creation and interaction.
+                amount: web3.utils.toWei('1', "ether")
             };
 
 
@@ -116,24 +132,49 @@ export function GeneralContextProvider(props: any) {
                 method: 'eth_sendTransaction',
                 params: [transactionParameters],
             });
+            await ctx.waitTransactionByMined(txHash)
+            console.log("txHash", txHash)
+            if (txHash) {
+                alert('Strategy Is succesfully Deployed')
+            } else {
+                alert('Error in deploying the strategy')
+
+            }
+
+            // const signAndSendTransaction = async (tx) => {
+            // const signedTx = await web3.eth.accounts.signTransaction(tx, privateKey);
+            // console.log("SENDED TRANSACTION!!")
+            // console.log(signedTx.rawTransaction)
+            // return web3.eth.sendSignedTransaction(signedTx.raw || signedTx.rawTransaction)
+            // // }
+
+            // console.log("txHash", txHash)
+
 
         },
         getCreditAccountData: async () => {
             const tx = await ctx.strategyManagerContract().methods.getCreditAccountData(ctx.account).call()
-            console.log('"crredit accoutn data"', tx)
+            console.log("tx", tx)
+            setCreditAccountData(tx)
+        },
+        creditAccountData: '',
+        waitTransactionByMined: async (transactonHash: string) => {
+            let transactionReceipt = null
+            while (transactionReceipt == null) { // Waiting expectedBlockTime until the transaction is mined
+                transactionReceipt = await web3.eth.getTransactionReceipt(transactonHash);
+                await sleep(1000)
+            }
         }
 
+    }
+
+    const sleep = (milliseconds: number) => {
+        return new Promise(resolve => setTimeout(resolve, milliseconds))
     }
 
     useMemo(async () => {
         await ctx.getAccounts()
         await ctx.getCreditAccountData()
-
-
-        // console.log("ABI", strategyManagerJson.abi)
-
-        // console.log("strategyManagerContract",strategyManagerContract)
-        // ctx.strategyManagerContract = strategyManagerContract
     }, [])
 
 
