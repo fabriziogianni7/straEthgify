@@ -12,7 +12,8 @@ import {
   WETH_ADDRESS,
   UNI_V2_USDC_ADAPTER,
   YEARN_VAULT,
-  LEVERAGE_FACTOR
+  LEVERAGE_FACTOR,
+  WBTC_ADDRESS
 } from '../../config'
 
 
@@ -39,7 +40,7 @@ function StraEthForm() {
   }
 
   const handleSetWindowSize = (v: any) => {
-    setleverageFactor(v)
+    setWindowSize(v)
   }
 
   return (
@@ -58,8 +59,8 @@ function StraEthForm() {
             label="Age"
             onChange={(e: any) => setAsset(e.target.value)}
           >
-            <MenuItem value={'ETH'}>ETH</MenuItem>
-            <MenuItem value={'BTC'}>BTC</MenuItem>
+            <MenuItem value={WETH_ADDRESS}>WETH</MenuItem>
+            <MenuItem value={WBTC_ADDRESS}>WBTC</MenuItem>
           </Select>
 
         </FormControl>
@@ -72,7 +73,10 @@ function StraEthForm() {
           label="Amount"
           variant="outlined"
           type='number'
-          onChange={(e) => setAssetAmount(e.target.value)}
+          onChange={(e) => {
+            const val = (Number(e.target.value)*1000000).toString()
+            setAssetAmount(val)
+          }}
         />
       </div>
       <div className='form-component'>
@@ -153,15 +157,16 @@ function StraEthForm() {
         <Button
           id='deploy-strategy-button'
           size="medium"
+          color='primary'
           onClick={async () => await context.createStrategy(CREDIT_MANAGER_ADDRESS_USDC,
-            TIME_FRAME,
-            WINDOW_SIZE,
-            USDC_AMOUNT,
+            timeFrame,
+            windowSize,
+            assetAmount,
             USDC_ADDRESS,
-            WETH_ADDRESS,
+            asset,
             UNI_V2_USDC_ADAPTER,
             YEARN_VAULT,
-            LEVERAGE_FACTOR)}
+            leverageFactor)}
         >Deploy Strategy
         </Button>
       </ButtonGroup>
