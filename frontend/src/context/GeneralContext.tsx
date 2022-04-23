@@ -9,6 +9,8 @@ declare var window: any
 export function GeneralContextProvider(props: any) {
     const web3 = new Web3("http://localhost:8545")
 
+    const contractAddress = '0xE862e9E0aae009F75950181C418981527881835c'
+
     const ctx = {
         test: () => alert("ctx is ok"),
         callTestStrategy: async (testParams: any) => alert("todo: call test strategy api call"),
@@ -26,7 +28,7 @@ export function GeneralContextProvider(props: any) {
             ctx.accountConnected = await window.ethereum.request({ method: 'eth_requestAccounts' })
             // return ctx.accountConnected
         },
-        strategyManagerContract: () => new web3.eth.Contract(strategyManagerJson.abi as AbiItem[], '0xC423bDffF27e64E84a661168b2D75964e34552F8'),
+        strategyManagerContract: () => new web3.eth.Contract(strategyManagerJson.abi as AbiItem[], contractAddress),
         createStrategy: async (
             creditManagerAddress: any,
             timeframe: any,
@@ -51,12 +53,16 @@ export function GeneralContextProvider(props: any) {
             )
 
             console.log('which one is the transaction?', tx)
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            console.log(accounts[0])
+
 
            const gas =  await web3.eth.estimateGas({
-                to: '0xE94Bd373eB4e095E5b3AfAe7495f9cc6474b2FB9',
+                to: contractAddress,
                 data: tx.encodeABI()
               })
               console.log("gas",gas)
+
 
             // const baseFee = await web3.eth.getBlock("pending");
             // console.log('baseFee', baseFee)
@@ -64,8 +70,8 @@ export function GeneralContextProvider(props: any) {
             // console.log('chainId', await web3.eth.getChainId())
             const transactionParameters = {
                 gas: String(gas), // customizable by user during MetaMask confirmation.
-                to: '0x6dDFFB72e5b805629E8375De6a5E0Da1c3a0854A', // Required except during contract publications.
-                from: '0xE94Bd373eB4e095E5b3AfAe7495f9cc6474b2FB9', // must match user's active address.
+                to: contractAddress, // Required except during contract publications.
+                from: accounts[0], // must match user's active address.
                 data: tx.encodeABI(), // Optional, but used for defining smart contract creation and interaction.
             };
 
