@@ -26,22 +26,22 @@ export const timeframeMarks = [
     {
       value: 1,
       label: '2x',
-      leverage: 2
+      leverage: 200
     },
     {
       value: 2,
       label: '3x',
-      leverage: 3
+      leverage: 300
     },
     {
       value: 3,
       label: '4x',
-      leverage: 4
+      leverage: 400
     },
     {
       value: 4,
       label: '5x',
-      leverage: 5
+      leverage: 500
     }
   ];
   

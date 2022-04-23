@@ -67,8 +67,6 @@ export function GeneralContextProvider(props: any) {
                 params: [transactionParameters],
             });
             console.log("txHash", txHash)
-
-
         },
         createStrategy: async (
             creditManagerAddress: any,
@@ -94,7 +92,6 @@ export function GeneralContextProvider(props: any) {
                 leverageFactor,
             )
 
-            console.log('which one is the transaction?', tx)
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             console.log(accounts[0])
 
@@ -121,6 +118,12 @@ export function GeneralContextProvider(props: any) {
                 params: [transactionParameters],
             });
             console.log("txHash", txHash)
+            if(txHash){
+                alert('Strategy Is succesfully Deployed')
+            }else{
+                alert('Error in deploying the strategy')
+
+            }
 
             // const signAndSendTransaction = async (tx) => {
             // const signedTx = await web3.eth.accounts.signTransaction(tx, privateKey);

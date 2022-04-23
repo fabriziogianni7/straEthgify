@@ -6,16 +6,16 @@ export default function Balances() {
 
   const { creditAccountData, getCreditAccountData } = useContext(GeneralContext)
 
-  const [x, setX] = useState()
 
   useEffect(() => {
     async function getCreditsAccs() {
       await getCreditAccountData();
     }
     getCreditsAccs()
+    console.log(creditAccountData)
   }, [])
 
-  console.log(x)
+  // console.log(x)
 
   return <div className="App">
     <div className="credit-account-table">
