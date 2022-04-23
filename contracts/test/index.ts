@@ -73,4 +73,15 @@ describe("StrategyManager", function () {
     )).to.emit(strategyManager, 'Rebalance')
   });
 
+
+  it("Should go risky after stay stable", async function () {
+    const [owner] = await ethers.getSigners();
+    const strategyManagerInstance = strategyManager.connect(owner)
+    const userVault = await strategyManagerInstance.getUserVault(owner.address)
+    const userVaultAddress = userVault[1]
+    await expect(strategyManager.connect(owner).rebalance(
+      userVaultAddress,
+      1
+    )).to.emit(strategyManager, 'Rebalance')
+  });
 });

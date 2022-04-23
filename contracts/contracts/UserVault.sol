@@ -134,6 +134,9 @@ contract UserVault {
             address asset
         )
     {
+        if (status == 2) {
+            yearnV2Adapter.withdraw();
+        }
         address[] memory path = new address[](2);
 
         //TODO: Move this to vars on contract creation
@@ -163,28 +166,37 @@ contract UserVault {
             address asset
         )
     {
-        address[] memory path = new address[](2);
+        uint256 depositAmount;
+        if (status == 1) {
+            address[] memory path = new address[](2);
 
-        //TODO: Move this to vars on contract creation
-        path[0] = riskyAsset;
-        path[1] = collateralAsset;
+            //TODO: Move this to vars on contract creation
+            path[0] = riskyAsset;
+            path[1] = collateralAsset;
 
-        (, uint256 riskyAmount) = getTokenAmounts();
+            (, uint256 riskyAmount) = getTokenAmounts();
 
-        uint256[] memory amounts = _swap(
-            riskyAmount,
-            0, //TODO: Calculate amountOutMin
-            path,
-            address(this),
-            1750391703 //TODO: Calculate Deadline
-        );
+            uint256[] memory amounts = _swap(
+                riskyAmount,
+                0, //TODO: Calculate amountOutMin
+                path,
+                address(this),
+                1750391703 //TODO: Calculate Deadline
+            );
+
+            depositAmount = amounts[1];
+        } else {
+            depositAmount = ERC20Upgradeable(collateralAsset).balanceOf(
+                address(this)
+            );
+        }
 
         ERC20Upgradeable(collateralAsset).approve(
             address(yearnV2Adapter),
-            amounts[1]
+            depositAmount
         );
 
-        yearnV2Adapter.deposit(amounts[1], address(this));
+        yearnV2Adapter.deposit(depositAmount, address(this));
 
         status = 2;
 
