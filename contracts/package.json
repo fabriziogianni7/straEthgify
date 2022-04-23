@@ -2,6 +2,8 @@
   "name": "hardhat-project",
   "scripts": {
     "test": "npx hardhat test",
+    "deploy:local": "npx hardhat run --network localhost scripts/deploy.ts",
+    "add:data": "npx hardhat run --network localhost scripts/add-data.ts",
     "address-discovery": "npx hardhat run scripts/gearbox-discovery.ts"
   },
   "devDependencies": {

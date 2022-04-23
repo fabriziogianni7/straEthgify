@@ -54,6 +54,14 @@ describe("StrategyManager", function () {
   });
 
 
+
+  it("Should return balances", async function () {
+    const [owner] = await ethers.getSigners();
+    const strategyManagerInstance = strategyManager.connect(owner)
+    const users = await strategyManagerInstance.getAllUsers()
+  });
+
+
   it("Should execute a rebalance to go stable", async function () {
     const [owner] = await ethers.getSigners();
     const strategyManagerInstance = strategyManager.connect(owner)

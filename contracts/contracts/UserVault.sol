@@ -86,7 +86,7 @@ contract UserVault {
         return amounts;
     }
 
-    function getCreditAccountData()
+    function getTokenBalances()
         public
         view
         returns (DataTypes.TokenBalance[] memory)
@@ -97,10 +97,21 @@ contract UserVault {
         return data.balances;
     }
 
+    function getCreditAccountData()
+        public
+        view
+        returns (DataTypes.CreditAccountData memory)
+    {
+        DataTypes.CreditAccountData memory data = dataCompressor
+            .getCreditAccountData(address(creditManager), address(this));
+
+        return data;
+    }
+
     function getTokenAmounts() private view returns (uint256, uint256) {
         uint256 stable;
         uint256 risky;
-        DataTypes.TokenBalance[] memory tokenBalances = getCreditAccountData();
+        DataTypes.TokenBalance[] memory tokenBalances = getTokenBalances();
 
         for (uint256 index = 0; index < tokenBalances.length; index++) {
             if (tokenBalances[index].token == collateralAsset) {
@@ -139,6 +150,8 @@ contract UserVault {
             1750391703 //TODO: Calculate Deadline
         );
 
+        status = 1;
+
         return (1, amounts[1], address(this));
     }
 
@@ -173,6 +186,8 @@ contract UserVault {
 
         yearnV2Adapter.deposit(amounts[1], address(this));
 
-        return (0, 1, address(this));
+        status = 2;
+
+        return (0, 1, address(yearnV2Adapter));
     }
 }

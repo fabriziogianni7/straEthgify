@@ -102,7 +102,14 @@ contract StrategyManager {
     {
         User memory user = userVaults[_user];
 
-        return (user.addr, user.userVault, user.timeFrame, user.windowSize, user.riskyAsset, user.collateralAsset);
+        return (
+            user.addr,
+            user.userVault,
+            user.timeFrame,
+            user.windowSize,
+            user.riskyAsset,
+            user.collateralAsset
+        );
     }
 
     function getAllUsers() public view returns (address[] memory) {
@@ -112,11 +119,9 @@ contract StrategyManager {
     function getCreditAccountData(address _user)
         public
         view
-        returns (DataTypes.TokenBalance[] memory)
+        returns (DataTypes.CreditAccountData memory)
     {
         User memory user = userVaults[_user];
-       return UserVault(
-            user.userVault
-        ).getCreditAccountData();
+        return UserVault(user.userVault).getCreditAccountData();
     }
 }
