@@ -13,3 +13,4 @@ export const WBTC_ADDRESS = '0xE36bC5d8b689AD6d80e78c3e736670e80d4b329D'
 export const STRATEGY_CONTRACT_ADDRESS = '0xafdc1034C8ebc6676C08073A9B629E269f3f6bE0'
 
 
+export const API_BASE_PATH = 'http://127.0.0.1:5000/api/v1/backtest/symbol'
