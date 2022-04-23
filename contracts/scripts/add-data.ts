@@ -4,7 +4,7 @@ require('dotenv').config()
 async function main() {
 
   const USDC_ADDRESS = '0x31EeB2d0F9B6fD8642914aB10F4dD473677D80df'
-  const USDC_AMOUNT = '500000000'
+  const USDC_AMOUNT = '100000000'
   const TIME_FRAME = 3600
   const WINDOW_SIZE = 100
   const CREDIT_MANAGER_ADDRESS_USDC = '0xdbad1361d9a03b81be8d3a54ef0dc9e39a1ba5b3'
@@ -24,6 +24,12 @@ async function main() {
   const strategyManagerFactory = await ethers.getContractFactory("StrategyManager");
   const strategyManager = await strategyManagerFactory.attach(STRATEGY_MANAGER_ADDRESS)
   await usdc.connect(owner).approve(strategyManager.address, USDC_AMOUNT)
+  const allowance = await usdc.connect(owner).allowance(owner.address, strategyManager.address)
+  const amount = await usdc.connect(owner).balanceOf(owner.address)
+
+  console.log({ allowance })
+  console.log({ amount })
+
   const tx = await strategyManager.connect(owner).createStrategy(
     CREDIT_MANAGER_ADDRESS_USDC,
     TIME_FRAME,
@@ -37,18 +43,6 @@ async function main() {
   )
 
   console.log({ tx })
-
-
-  const users = await strategyManager.connect(owner).getAllUsers()
-
-  console.log(users)
-
-  // const userData = await strategyManager.connect(owner).getUserVault(allUsers[0])
-  // console.log("User Data")
-  // console.log(userData)
-
-
-
 }
 
 
