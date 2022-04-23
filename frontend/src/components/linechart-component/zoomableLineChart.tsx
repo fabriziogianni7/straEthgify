@@ -55,7 +55,6 @@ function ZoomableLineChart({
     const svg = select(svgRef.current || '');
     const benchmarkValues = benchmark.map((val: any) => val.value)
     const dates = benchmark.map((val: any) => formatTime(new Date(val.date)))
-    console.log(dates)
     const firstStrategyValues = firstStrategy?.map((val: any) => val.value)
     const secondStrategyValues = secondStrategy?.map((val: any) => val.value)
     const thirdStrategyValues = thirdStrategy?.map((val: any) => val.value)
@@ -190,7 +189,6 @@ function ZoomableLineChart({
         .attr("stroke", 'transparent')
       cb(true)
     } else { //lineGenerator
-      console.log('inside else')
       svg
         .selectAll('.' + lineClass)
         .attr("class", lineClass)

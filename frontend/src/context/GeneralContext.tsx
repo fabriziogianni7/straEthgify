@@ -23,6 +23,31 @@ export function GeneralContextProvider(props: any) {
             return false
         },
         account: '',
+        dateBacktest: '',
+        timeFrameBacktest: 0 as number,
+        leverageFactor: 0 as number,
+        windowSize: 0 as number,
+        assetAmount: 0 as number,
+        assetBacktest: '',
+        setBacktestDate: async (date: string) => {
+            ctx.dateBacktest = date;
+        },
+        setTimeFrame: async (amount: number) => {
+            ctx.timeFrameBacktest = amount
+        },
+        setLeverageFactor: async (amount: number) => {
+            ctx.leverageFactor = amount
+        },
+        setWindowSize: async (amount: number) => {
+            ctx.windowSize = amount
+        },
+        setAssetAmount: async (amount: number) => {
+            ctx.assetAmount = amount
+        },
+        setBacktestAsset: async (asset: string) => {
+            console.log(asset)
+            ctx.assetBacktest = asset
+        },
         getAccounts: async () => {
             console.log((await window.ethereum.request({ method: 'eth_requestAccounts' }))[0])
             ctx.account = (await window.ethereum.request({ method: 'eth_requestAccounts' }))[0]
