@@ -40,7 +40,7 @@ export const timeframeMarks = [
     },
     {
       value: 4,
-      label: '4x',
+      label: '5x',
       leverage: 5
     }
   ];
