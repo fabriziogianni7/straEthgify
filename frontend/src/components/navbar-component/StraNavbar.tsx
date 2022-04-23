@@ -7,7 +7,7 @@ function StraNavbar() {
 const {account, connectMetamask} = useContext(GeneralContext);
 
 
-useEffect(()=> console.log('account connected', account), [])
+useEffect(()=> console.log('account connected', account), [account])
   return (
 
     <div className='navbar'>
