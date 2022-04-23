@@ -1,19 +1,22 @@
-import { useEffect, useMemo } from "react";
+import { useMemo, useState } from "react";
 import { GeneralContext } from "./index"
 import strategyManagerJson from '../contracts/StrategyManager.json'
 import usdcContractJson from '../contracts/USDCContract.json'
 import Web3 from 'web3';
 import { AbiItem } from "web3-utils";
 import { STRATEGY_CONTRACT_ADDRESS, USDC_ADDRESS, USDC_AMOUNT } from "../config";
-import { createTextSpanFromBounds } from "typescript";
 
 declare var window: any
 
 export function GeneralContextProvider(props: any) {
-    const web3 = new Web3("http://localhost:8545")
-
-    // const STRATEGY_CONTRACT_ADDRESS = '0xE862e9E0aae009F75950181C418981527881835c'
-
+    const web3 = new Web3(window.ethereum)
+    const [account, setAccount] = useState('')
+    const [dateBacktest, setDateBacktest] = useState('2021-04-22')
+    const [timeFrameBacktest, setTimeFrameBacktest] = useState(0)
+    const [leverageFactor, setLeverageFactor] = useState(0)
+    const [windowSize, setWindowSize] = useState(10)
+    const [assetAmount, setAssetAmount] = useState(10000)
+    const [assetBacktest, setAssetBacktest] = useState('bitcoin')
     const ctx = {
         test: () => alert("ctx is ok"),
         callTestStrategy: async (testParams: any) => alert("todo: call test strategy api call"),
@@ -25,7 +28,19 @@ export function GeneralContextProvider(props: any) {
             }
             return false
         },
-        account: '',
+        account,
+        dateBacktest,
+        timeFrameBacktest,
+        leverageFactor,
+        windowSize,
+        assetAmount,
+        assetBacktest,
+        setDateBacktest,
+        setTimeFrameBacktest,
+        setLeverageFactor,
+        setWindowSize,
+        setAssetAmount,
+        setAssetBacktest,
         getAccounts: async () => {
             console.log((await window.ethereum.request({ method: 'eth_requestAccounts' }))[0])
             ctx.account = (await window.ethereum.request({ method: 'eth_requestAccounts' }))[0]
@@ -33,13 +48,9 @@ export function GeneralContextProvider(props: any) {
         connectMetamask: async () => {
             console.log('inside metamask')
             ctx.account = await window.ethereum.request({ method: 'eth_requestAccounts' })
-            // return ctx.accountConnected
-            // console.log("cccc", ctx.accountConnected)
         },
         strategyManagerContract: () => new web3.eth.Contract(strategyManagerJson.abi as AbiItem[], STRATEGY_CONTRACT_ADDRESS),
         approveStrategyContract: async () => {
-            // console.log(await ctx.strategyManagerContract())
-
             const usdcContract = new web3.eth.Contract(usdcContractJson as AbiItem[], USDC_ADDRESS)
 
             const tx = await usdcContract.methods.approve(STRATEGY_CONTRACT_ADDRESS, USDC_AMOUNT)
@@ -53,7 +64,6 @@ export function GeneralContextProvider(props: any) {
                 data: tx.encodeABI()
             })
 
-            // console.log('ctx.accountConnected()', (ctx.account))
             const transactionParameters = {
                 gas: String(gas), // customizable by user during MetaMask confirmation.
                 to: USDC_ADDRESS,  // Required except during contract publications.
@@ -66,8 +76,6 @@ export function GeneralContextProvider(props: any) {
                 params: [transactionParameters],
             });
             console.log("txHash", txHash)
-
-
         },
         createStrategy: async (
             creditManagerAddress: any,
@@ -98,39 +106,22 @@ export function GeneralContextProvider(props: any) {
             console.log(accounts[0])
 
             const transactionParameters = {
-                // gas: String(gas), // customizable by user during MetaMask confirmation.
                 to: STRATEGY_CONTRACT_ADDRESS,  // Required except during contract publications.
                 from: accounts[0], // must match user's active address.
                 data: tx.encodeABI(), // Optional, but used for defining smart contract creation and interaction.
             };
 
 
-
-            // txHash is a hex string
-            // As with any RPC call, it may throw an error
             const txHash = await window.ethereum.request({
                 method: 'eth_sendTransaction',
                 params: [transactionParameters],
             });
-            console.log("txHash", txHash)
-
-            // const signAndSendTransaction = async (tx) => {
-            // const signedTx = await web3.eth.accounts.signTransaction(tx, privateKey);
-            // console.log("SENDED TRANSACTION!!")
-            // console.log(signedTx.rawTransaction)
-            // return web3.eth.sendSignedTransaction(signedTx.raw || signedTx.rawTransaction)
-            // // }
-
-            // console.log("txHash", txHash)
-
 
         },
         getCreditAccountData: async () => {
             const tx = await ctx.strategyManagerContract().methods.getCreditAccountData(ctx.account).call()
             console.log('"crredit accoutn data"', tx)
         }
-
-
 
     }
 

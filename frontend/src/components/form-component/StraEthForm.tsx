@@ -1,46 +1,35 @@
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import './css/StraEthForm.css';
 import { Button, ButtonGroup, FormControl, InputLabel, MenuItem, Select, Slider, TextField, Typography } from '@material-ui/core';
 import { leverageFactorMarks, timeframeMarks } from './constants'
 import { GeneralContext } from '../../context';
 import {
   CREDIT_MANAGER_ADDRESS_USDC,
-  TIME_FRAME,
-  WINDOW_SIZE,
-  USDC_AMOUNT,
   USDC_ADDRESS,
   WETH_ADDRESS,
   UNI_V2_USDC_ADAPTER,
   YEARN_VAULT,
-  LEVERAGE_FACTOR,
-  WBTC_ADDRESS
+  WBTC_ADDRESS,
+  ASSET_NAMES
 } from '../../config'
-
-
-
 
 function StraEthForm() {
 
   const context = useContext(GeneralContext)
-  const [asset, setAsset] = useState('')
-  const [date, setDate] = useState('')
-  const [timeFrame, setTimeframe] = useState(0)
-  const [leverageFactor, setleverageFactor] = useState(0)
-  const [windowSize, setWindowSize] = useState(0)
-  const [assetAmount, setAssetAmount] = useState('')
+  const [asset, setAsset] = useState('0xE36bC5d8b689AD6d80e78c3e736670e80d4b329D')
 
   const handleSetTimeframe = (v: any) => {
     const tframe = timeframeMarks.filter((item: any) => item.value === v)[0].timeFrame
-    setTimeframe(tframe)
+    context.setTimeFrameBacktest(tframe)
   }
   const handleSetLeverageFactor = (v: any) => {
     const lev = leverageFactorMarks.filter((item: any) => item.value === v)[0].leverage
     // console.log('lev', lev)
-    setleverageFactor(lev)
+    context.setLeverageFactor(lev)
   }
 
   const handleSetWindowSize = (v: any) => {
-    setWindowSize(v)
+    context.setWindowSize(v)
   }
 
   return (
@@ -57,8 +46,12 @@ function StraEthForm() {
             id="select-asset"
             value={asset}
             label="Age"
-            onChange={(e: any) => setAsset(e.target.value)}
+            onChange={(e: any) => {
+              setAsset(e.target.value)
+              context.setAssetBacktest(ASSET_NAMES[e.target.value])
+            }}
           >
+
             <MenuItem value={WETH_ADDRESS}>WETH</MenuItem>
             <MenuItem value={WBTC_ADDRESS}>WBTC</MenuItem>
           </Select>
@@ -73,9 +66,10 @@ function StraEthForm() {
           label="Amount"
           variant="outlined"
           type='number'
+          defaultValue={10000}
           onChange={(e) => {
-            const val = (Number(e.target.value)*1000000).toString()
-            setAssetAmount(val)
+            const val = Number(e.target.value)
+            context.setAssetAmount(val)
           }}
         />
       </div>
@@ -90,7 +84,7 @@ function StraEthForm() {
           InputLabelProps={{
             shrink: true,
           }}
-          onChange={(e: any) => setDate(e.target.value)}
+          onChange={(e: any) => context.setDateBacktest(e.target.value)}
         />
       </div>
 
@@ -159,14 +153,14 @@ function StraEthForm() {
           size="medium"
           color='primary'
           onClick={async () => await context.createStrategy(CREDIT_MANAGER_ADDRESS_USDC,
-            timeFrame,
-            windowSize,
-            assetAmount,
+            context.timeFrameBacktest,
+            context.windowSize,
+            context.assetAmount * 1000000,
             USDC_ADDRESS,
             asset,
             UNI_V2_USDC_ADAPTER,
             YEARN_VAULT,
-            leverageFactor)}
+            context.leverageFactor)}
         >Deploy Strategy
         </Button>
       </ButtonGroup>
