@@ -39,10 +39,9 @@ function ZoomableLineChart({
   const [hideThirdStrategy, setHideThirdStrategy] = useState(false);
 
   const labelsStrokesClasses = [
-    { label: 'Benchmark', stroke: 'red', lineClass: 'benchmarkLine', cb: setHideBenchmark, attr: hideBenchmark },
-    { label: 'First Strategy', stroke: 'blue', lineClass: 'firstStrategyLine', cb: setHideFirstStrategy, attr: hideFirstStrategy },
-    { label: 'Second Strategy', stroke: 'green', lineClass: 'secondStrategyLine', cb: setHideSecondStrategy, attr: hideSecondStrategy },
-    { label: 'Third Strategy', stroke: 'pink', lineClass: 'thirdStrategyLine', cb: setHideThirdStrategy, attr: hideThirdStrategy },
+    { label: 'Benchmark', stroke: '#488290', lineClass: 'benchmarkLine', cb: setHideBenchmark, attr: hideBenchmark },
+    { label: 'First Strategy', stroke: '#904882', lineClass: 'firstStrategyLine', cb: setHideFirstStrategy, attr: hideFirstStrategy },
+    { label: 'Second Strategy', stroke: '#829048', lineClass: 'secondStrategyLine', cb: setHideSecondStrategy, attr: hideSecondStrategy },
   ]
 
   // will be called initially and on every benchmark change
