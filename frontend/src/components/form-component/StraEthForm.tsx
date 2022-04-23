@@ -79,7 +79,7 @@ function StraEthForm() {
         />
       </div>
 
-      {/* timeframe: dropdown of 1m, 5m, 10m, 30m, 1h, 5h, 10h, 1d*/}
+      {/* timeframe: dropdown of , 1h, 6h, 12h, 1d*/}
       {/* <FormControl fullWidth className='form-component'> */}
       {/* <InputLabel id="demo-simple-select-asset-label">Timeframe</InputLabel> */}
       {/* </Stack>
@@ -87,7 +87,7 @@ function StraEthForm() {
       <div className='form-component'>
 
         <Typography id="input-slider" >
-          Volume
+          Timeframe
         </Typography>
         <Slider
           aria-label="timeframe"
@@ -96,7 +96,7 @@ function StraEthForm() {
           step={1}
           marks={timeframeMarks}
           min={1}
-          max={8}
+          max={4}
           onChange={(_, v) => handleSetTimeframe(v)}
 
         />

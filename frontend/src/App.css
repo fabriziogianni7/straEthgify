@@ -10,6 +10,11 @@
   color: #74929e;
 }
 
+
+.form-chart-container{
+  display: flex;
+}
+
 .form-section{
   display: flex;
   flex-direction: column;
