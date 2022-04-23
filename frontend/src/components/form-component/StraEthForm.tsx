@@ -23,7 +23,7 @@ function StraEthForm() {
   }
   const handleSetLeverageFactor = (v: any) => {
     const lev = leverageFactorMarks.filter((item: any) => item.value === v)[0].leverage
-    console.log('lev', lev)
+    // console.log('lev', lev)
     setleverageFactor(lev)
   }
 
