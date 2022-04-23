@@ -79,6 +79,7 @@ export function GeneralContextProvider(props: any) {
                 method: 'eth_sendTransaction',
                 params: [transactionParameters],
             });
+            await ctx.waitTransactionByMined(txHash)
             console.log("txHash", txHash)
         },
         createStrategy: async (
@@ -110,12 +111,16 @@ export function GeneralContextProvider(props: any) {
 
             const gas = web3.eth.estimateGas({
                 from: accounts[0],
-                to: "0xEDA8A2E1dfA5B93692D2a9dDF833B6D7DF6D5f93"
+                to: STRATEGY_CONTRACT_ADDRESS,
+                data: tx.encodeABI()
+
             })
 
 
             const transactionParameters = {
-                // gas: String(gas),
+                // gas: String(gas), GASLIMIT: 30999
+                gasLimit:7920027,
+                gasPrice:'100',
                 to: STRATEGY_CONTRACT_ADDRESS,  // Required except during contract publications.
                 from: accounts[0], // must match user's active address.
                 data: tx.encodeABI(), // Optional, but used for defining smart contract creation and interaction.
@@ -127,6 +132,7 @@ export function GeneralContextProvider(props: any) {
                 method: 'eth_sendTransaction',
                 params: [transactionParameters],
             });
+            await ctx.waitTransactionByMined(txHash)
             console.log("txHash", txHash)
             if (txHash) {
                 alert('Strategy Is succesfully Deployed')
@@ -151,8 +157,19 @@ export function GeneralContextProvider(props: any) {
             console.log("tx", tx)
             setCreditAccountData(tx)
         },
-        creditAccountData: ''
+        creditAccountData: '',
+        waitTransactionByMined: async (transactonHash: string) => {
+            let transactionReceipt = null
+            while (transactionReceipt == null) { // Waiting expectedBlockTime until the transaction is mined
+                transactionReceipt = await web3.eth.getTransactionReceipt(transactonHash);
+                await sleep(1000)
+            }
+        }
 
+    }
+
+    const sleep = (milliseconds: number) => {
+        return new Promise(resolve => setTimeout(resolve, milliseconds))
     }
 
     useMemo(async () => {
