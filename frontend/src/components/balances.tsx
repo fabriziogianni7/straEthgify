@@ -1,19 +1,19 @@
 import { Typography } from "@material-ui/core";
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useMemo, useState } from "react"
 import { ADDRESS_TOKEN_MAPPING } from "../config";
 import { GeneralContext } from '../context/index';
 export default function Balances() {
 
-  const { creditAccountData, getCreditAccountData } = useContext(GeneralContext)
+  const { creditAccountData } = useContext(GeneralContext)
 
 
   useEffect(() => {
-    async function getCreditsAccs() {
-      await getCreditAccountData();
-    }
-    getCreditsAccs()
+    // // async function getCreditsAccs() {
+    //   await getCreditAccountData();
+    // // }
+    // // getCreditsAccs()
     console.log(creditAccountData)
-  }, [])
+  }, [creditAccountData])
 
   // console.log(x)
 

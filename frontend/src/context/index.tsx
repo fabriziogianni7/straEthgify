@@ -20,6 +20,7 @@ export const GeneralContext = React.createContext({
     setWindowSize: (amount:number) =>{},
     setAssetAmount: (amount:number) =>{},
     setAssetBacktest: (asset:string) => {},
+    setCreditAccountData: (data:any) => {},
     strategyManagerContract:()=> {},
     approveStrategyContract:async () =>{},
     createStrategy: async (

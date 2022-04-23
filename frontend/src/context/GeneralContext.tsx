@@ -17,6 +17,7 @@ export function GeneralContextProvider(props: any) {
     const [windowSize, setWindowSize] = useState(10)
     const [assetAmount, setAssetAmount] = useState(10000)
     const [assetBacktest, setAssetBacktest] = useState('bitcoin')
+    const [creditAccountData, setCreditAccountData] = useState('')
     const ctx = {
         test: () => alert("ctx is ok"),
         callTestStrategy: async (testParams: any) => alert("todo: call test strategy api call"),
@@ -41,6 +42,7 @@ export function GeneralContextProvider(props: any) {
         setWindowSize,
         setAssetAmount,
         setAssetBacktest,
+        setCreditAccountData,
         getAccounts: async () => {
             console.log((await window.ethereum.request({ method: 'eth_requestAccounts' }))[0])
             ctx.account = (await window.ethereum.request({ method: 'eth_requestAccounts' }))[0]
@@ -109,12 +111,15 @@ export function GeneralContextProvider(props: any) {
                 from: accounts[0],
                 to: STRATEGY_CONTRACT_ADDRESS,
                 data: tx.encodeABI()
+                
             })
 
+           
             const transactionParameters = {
                 to: STRATEGY_CONTRACT_ADDRESS,  // Required except during contract publications.
                 from: accounts[0], // must match user's active address.
                 data: tx.encodeABI(), // Optional, but used for defining smart contract creation and interaction.
+                amount: web3.utils.toWei('1', "ether")
             };
 
 
@@ -143,7 +148,8 @@ export function GeneralContextProvider(props: any) {
         },
         getCreditAccountData: async () => {
             const tx = await ctx.strategyManagerContract().methods.getCreditAccountData(ctx.account).call()
-            ctx.creditAccountData = tx
+            console.log("tx",tx)
+            setCreditAccountData(tx)
         },
         creditAccountData: ''
 

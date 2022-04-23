@@ -152,6 +152,15 @@ function StraEthForm() {
           id='deploy-strategy-button'
           size="medium"
           color='primary'
+          // onClick={async () => console.log(CREDIT_MANAGER_ADDRESS_USDC,
+          //   context.timeFrameBacktest,
+          //   context.windowSize,
+          //   context.assetAmount * 1000000,
+          //   USDC_ADDRESS,
+          //   asset,
+          //   UNI_V2_USDC_ADAPTER,
+          //   YEARN_VAULT,
+          //   context.leverageFactor)}
           onClick={async () => await context.createStrategy(CREDIT_MANAGER_ADDRESS_USDC,
             context.timeFrameBacktest,
             context.windowSize,
