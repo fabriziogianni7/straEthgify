@@ -1,18 +1,20 @@
 import axios from 'axios'
 import { ethers } from "ethers";
-import { addressToAsset } from './config.js';
-import abiJson from './StrategyManager.json'
+import { addressToAsset, abiJson } from './config.js';
+import dotenv from 'dotenv'
+dotenv.config()
 
-const contractAddress = process.env.contractAddress || '0x53B551F2d4eC25e566de1D174509df3F7baB6c51'
-const provider = new ethers.providers.JsonRpcProvider();
-const signer = provider.getSigner();
+const contractAddress = process.env.CONTRACT_ADDRESS || '0x95b177facB33f81bddfDE6e9376F11d001bC726e'
+const provider = new ethers.providers.JsonRpcProvider(process.env.ALCHEMY_API);
+const wallet = new ethers.Wallet(process.env.WALLET_PK, provider);
+const walletSigner = wallet.connect(provider)
 
-const strategyContract = new ethers.Contract(contractAddress, abiJson.abi, signer);
+const strategyContract = new ethers.Contract(contractAddress, abiJson.abi, walletSigner);
 const users = await strategyContract.getAllUsers()
 const userVaults = await Promise.all(users.map(async user => await strategyContract.getUserVault(user)))
 
-const ethPricesResponse = await axios.get('https://api.coingecko.com/api/v3/coins/ethereum/market_chart?vs_currency=usd&days=max&interval=seconds')
-const btcPricesResponse = await axios.get('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=max&interval=seconds')
+const ethPricesResponse = await axios.get(process.env.API_ENDPOINT_ETH)
+const btcPricesResponse = await axios.get(process.env.API_ENDPOINT_BTC)
 const ethPrices = ethPricesResponse.data.prices.map(el => el[1])
 const btcPrices = btcPricesResponse.data.prices.map(el => el[1])
 
