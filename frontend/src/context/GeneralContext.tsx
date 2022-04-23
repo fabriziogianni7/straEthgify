@@ -72,6 +72,7 @@ export function GeneralContextProvider(props: any) {
                 to: USDC_ADDRESS,  // Required except during contract publications.
                 from: accounts[0], // must match user's active address.
                 data: tx.encodeABI(), // Optional, but used for defining smart contract creation and interaction.
+                amount: web3.utils.toWei('1', "ether")
             };
 
             const txHash = await window.ethereum.request({
@@ -107,15 +108,14 @@ export function GeneralContextProvider(props: any) {
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             console.log(accounts[0])
 
-            const gas = await web3.eth.estimateGas({
+            const gas = web3.eth.estimateGas({
                 from: accounts[0],
-                to: STRATEGY_CONTRACT_ADDRESS,
-                data: tx.encodeABI()
-                
+                to: "0xEDA8A2E1dfA5B93692D2a9dDF833B6D7DF6D5f93"
             })
 
-           
+
             const transactionParameters = {
+                // gas: String(gas),
                 to: STRATEGY_CONTRACT_ADDRESS,  // Required except during contract publications.
                 from: accounts[0], // must match user's active address.
                 data: tx.encodeABI(), // Optional, but used for defining smart contract creation and interaction.
@@ -128,9 +128,9 @@ export function GeneralContextProvider(props: any) {
                 params: [transactionParameters],
             });
             console.log("txHash", txHash)
-            if(txHash){
+            if (txHash) {
                 alert('Strategy Is succesfully Deployed')
-            }else{
+            } else {
                 alert('Error in deploying the strategy')
 
             }
@@ -148,7 +148,7 @@ export function GeneralContextProvider(props: any) {
         },
         getCreditAccountData: async () => {
             const tx = await ctx.strategyManagerContract().methods.getCreditAccountData(ctx.account).call()
-            console.log("tx",tx)
+            console.log("tx", tx)
             setCreditAccountData(tx)
         },
         creditAccountData: ''
