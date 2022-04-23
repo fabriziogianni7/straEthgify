@@ -21,5 +21,6 @@ export const GeneralContext = React.createContext({
         yearnVault:any,
         leverageFactor:any,
         )=> {},
-    getCreditAccountData: async () : Promise<any> =>{} 
+    getCreditAccountData: async () : Promise<any> =>{} ,
+    creditAccountData: '' as any
 })

@@ -23,19 +23,33 @@
   display: flex;
   flex-direction: column;
 }
-/* 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+
+.credit-account-table{
+  width: 150vh;
+  height: 50vh;
+  border-radius: 5px;
+  color: white;
+  background-color: #74929e;
 }
 
+.balances-data{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding:10px;
+}
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-} */
+.balance-info{
+  display: flex;
+  flex-direction: row;
+}
+.balance-label{
+  display: flex;
+  flex-direction: row;
+  margin-right: 5px;
+  color:black
+}
+.balance-title{
+  color:black
+}

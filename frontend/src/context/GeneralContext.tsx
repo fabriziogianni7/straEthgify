@@ -135,8 +135,9 @@ export function GeneralContextProvider(props: any) {
         },
         getCreditAccountData: async () => {
             const tx = await ctx.strategyManagerContract().methods.getCreditAccountData(ctx.account).call()
-            console.log('"crredit accoutn data"', tx)
-        }
+            ctx.creditAccountData = tx
+        },
+        creditAccountData: ''
 
 
 
