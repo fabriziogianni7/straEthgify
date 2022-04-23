@@ -70,17 +70,8 @@ function ZoomableLineChart({
       xScale.domain(newXScale.domain());
     }
 
-    // TODO dynamically set min and max
     let minValue = Math.min(...benchmarkValues, ...firstStrategyValues, ...secondStrategyValues, ...thirdStrategyValues)
     let maxValue = Math.max(...benchmarkValues, ...firstStrategyValues, ...secondStrategyValues, ...thirdStrategyValues)
-
-    // if (secondValues) {
-    //   minValue = Math.min(...values, ...secondValues)
-    //   maxValue = Math.max(...values, ...secondValues)
-    // } else {
-    //   minValue = Math.min(...values)
-    //   maxValue = Math.max(...values)
-    // }
 
     const yScale = scaleLinear()
       .domain([minValue - 0.1 * Math.abs(minValue), maxValue + 0.1 * Math.abs(maxValue)])
@@ -89,8 +80,6 @@ function ZoomableLineChart({
     const lineGenerator = line()
       .x((d: any, index: any) => xScale(index))
       .y((d: any) => yScale(d))
-
-    // setLineGenerator(lineGenerator)
 
     // render the line
     if (!hideBenchmark) {
@@ -147,7 +136,7 @@ function ZoomableLineChart({
     const xAxis: any = axisBottom(xScale)
       .tickSize(-height)
       .tickPadding(10)
-      .tickFormat((v: any) => moment(dates[v]).format(' DD MMM YYYY'))
+      .tickFormat((v: any) => moment(dates[v]).format('DD MMM YYYY'))
     svg
       .select(".x-axis")
       .attr("transform", `translate(0, ${height})`)
@@ -205,7 +194,7 @@ function ZoomableLineChart({
       <div style={{ display: 'flex', flexDirection: 'row', paddingTop: "4vh" }}>
         {
           labelsStrokesClasses.map(item =>
-            <div className='chip-container' >
+            <div key={item.label} className='chip-container' >
               <Chip
                 label={item.label}
                 style={{ background: item.stroke, opacity: item.attr ? 0.5 : 1 }}

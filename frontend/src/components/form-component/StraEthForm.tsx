@@ -48,8 +48,7 @@ function StraEthForm() {
             label="Age"
             onChange={(e: any) => {
               setAsset(e.target.value)
-              const assetId = ASSET_NAMES.filter(el => el.id == e.target.value)
-              context.setBacktestAsset(assetId[0].id)
+              context.setBacktestAsset(ASSET_NAMES[e.target.value])
             }}
           >
 

@@ -12,8 +12,8 @@ export const WETH_ADDRESS = '0xd0A1E359811322d97991E03f863a0C30C2cF029C'
 export const API_BASE_PATH = 'http://127.0.0.1:5000/api/v1/backtest/symbol'
 export const WBTC_ADDRESS = '0xE36bC5d8b689AD6d80e78c3e736670e80d4b329D'
 export const STRATEGY_CONTRACT_ADDRESS = '0xafdc1034C8ebc6676C08073A9B629E269f3f6bE0'
-export const ASSET_NAMES = [
-    { id: "WETH", name:'ethereum'},
-    { id: "WBTC", name:'bitcoin'}
-]
+export const ASSET_NAMES: any = {
+    '0xd0A1E359811322d97991E03f863a0C30C2cF029C': 'ethereum',
+    '0xE36bC5d8b689AD6d80e78c3e736670e80d4b329D': 'bitcoin'
+}
 

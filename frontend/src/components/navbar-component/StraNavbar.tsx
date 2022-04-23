@@ -11,15 +11,15 @@ useEffect(()=> console.log('account connected', account), [account])
   return (
 
     <div className='navbar'>
-     <Typography variant='h5' >VeryFried Strategy</Typography> 
+     <Typography variant='h5' >VeryFried Strategy</Typography>
      <Button
           id='connect-wallet-button'
           size='medium'
-          onClick={async()=>await  connectMetamask()}
+          onClick={async() => await connectMetamask()}
           >{account? account : 'Connect Wallet'}
         </Button>
     </div>
-    
+
 
       // <AppBar color='secondary'>
       //   {/* <CssBaseline /> */}
