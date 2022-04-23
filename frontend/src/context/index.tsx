@@ -20,5 +20,6 @@ export const GeneralContext = React.createContext({
         uniV2UsdcAdapter:any,
         yearnVault:any,
         leverageFactor:any,
-        )=> {}
+        )=> {},
+    getCreditAccountData: async () : Promise<any> =>{} 
 })
