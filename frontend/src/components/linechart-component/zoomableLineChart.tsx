@@ -6,6 +6,7 @@ import {
   axisBottom,
   axisLeft,
   zoom,
+  timeFormat
 } from "d3";
 import useResizeObserver from "./useResizeObserver";
 import './css/StraEthChart.css'
@@ -47,12 +48,16 @@ function ZoomableLineChart({
   // will be called initially and on every benchmark change
   useEffect(() => {
     if (!benchmark) return
+
+    const formatTime = timeFormat("%B %d, %Y");
+    formatTime(new Date); // "June 30, 2015"
+
     const svg = select(svgRef.current || '');
     const benchmarkValues = benchmark.map((val: any) => val.value)
-    const dates = benchmark.map((val: any) => val.date)
+    const dates = benchmark.map((val: any) => formatTime(new Date(val.date)))
     const firstStrategyValues = firstStrategy?.map((val: any) => val.value)
-    const secondStrategyValues = secondStrategy?.map((val: any) => val.value * 0.5)
-    const thirdStrategyValues = thirdStrategy?.map((val: any) => val.value * -1.5)
+    const secondStrategyValues = secondStrategy?.map((val: any) => val.value)
+    const thirdStrategyValues = thirdStrategy?.map((val: any) => val.value)
     const svgContent = svg.select(".content");
     const { width, height } =
       dimensions || wrapperRef.current.getBoundingClientRect()
@@ -65,17 +70,8 @@ function ZoomableLineChart({
       xScale.domain(newXScale.domain());
     }
 
-    // TODO dynamically set min and max
-    let minValue = -80
-    let maxValue = 80
-
-    // if (secondValues) {
-    //   minValue = Math.min(...values, ...secondValues)
-    //   maxValue = Math.max(...values, ...secondValues)
-    // } else {
-    //   minValue = Math.min(...values)
-    //   maxValue = Math.max(...values)
-    // }
+    let minValue = Math.min(...benchmarkValues, ...firstStrategyValues, ...secondStrategyValues, ...thirdStrategyValues)
+    let maxValue = Math.max(...benchmarkValues, ...firstStrategyValues, ...secondStrategyValues, ...thirdStrategyValues)
 
     const yScale = scaleLinear()
       .domain([minValue - 0.1 * Math.abs(minValue), maxValue + 0.1 * Math.abs(maxValue)])
@@ -85,8 +81,6 @@ function ZoomableLineChart({
       .x((d: any, index: any) => xScale(index))
       .y((d: any) => yScale(d))
 
-    // setLineGenerator(lineGenerator)
-
     // render the line
     if (!hideBenchmark) {
       svgContent
@@ -95,10 +89,11 @@ function ZoomableLineChart({
         .join("path")
         .attr("class", labelsStrokesClasses[0].lineClass)
         .attr("stroke", labelsStrokesClasses[0].stroke)
-        .attr("stroke-width", 5)
+        .attr("stroke-width", 2)
         .attr("fill", "none")
         .attr("d", lineGenerator);
     }
+
 
     if (firstStrategy && !hideFirstStrategy) {
       svgContent
@@ -107,7 +102,7 @@ function ZoomableLineChart({
         .join("path")
         .attr("class", labelsStrokesClasses[1].lineClass)
         .attr("stroke", labelsStrokesClasses[1].stroke)
-        .attr("stroke-width", 3)
+        .attr("stroke-width", 2)
         .attr("fill", "none")
         .attr("d", lineGenerator);
     }
@@ -118,10 +113,13 @@ function ZoomableLineChart({
         .join("path")
         .attr("class", labelsStrokesClasses[2].lineClass)
         .attr("stroke", labelsStrokesClasses[2].stroke)
-        .attr("stroke-width", 3)
+        .attr("stroke-width", 2)
         .attr("fill", "none")
         .attr("d", lineGenerator);
     }
+
+    thirdStrategy = null
+
     if (thirdStrategy && !hideThirdStrategy) {
       svgContent
         .selectAll('.' + labelsStrokesClasses[3].lineClass)
@@ -129,7 +127,7 @@ function ZoomableLineChart({
         .join("path")
         .attr("class", labelsStrokesClasses[3].lineClass)
         .attr("stroke", labelsStrokesClasses[3].stroke)
-        .attr("stroke-width", 3)
+        .attr("stroke-width", 2)
         .attr("fill", "none")
         .attr("d", lineGenerator);
     }
@@ -138,7 +136,7 @@ function ZoomableLineChart({
     const xAxis: any = axisBottom(xScale)
       .tickSize(-height)
       .tickPadding(10)
-      .tickFormat((v: any) => moment(dates[v]).format(' DD MMM YYYY'))
+      .tickFormat((v: any) => moment(dates[v]).format('DD MMM YYYY'))
     svg
       .select(".x-axis")
       .attr("transform", `translate(0, ${height})`)
@@ -180,7 +178,6 @@ function ZoomableLineChart({
         .attr("stroke", 'transparent')
       cb(true)
     } else { //lineGenerator
-      console.log('inside else')
       svg
         .selectAll('.' + lineClass)
         .attr("class", lineClass)
@@ -193,14 +190,14 @@ function ZoomableLineChart({
 
   return (
     <div style={{ position: 'relative', padding: "4vh" }}>
-      <Typography variant="h5" style={{textAlign:"left"}} color='primary'>Show/hide strategy</Typography>
+      <Typography variant="h5" style={{ textAlign: "left" }} color='primary'>Show/hide strategy</Typography>
       <div style={{ display: 'flex', flexDirection: 'row', paddingTop: "4vh" }}>
         {
           labelsStrokesClasses.map(item =>
-            <div className='chip-container' >
+            <div key={item.label} className='chip-container' >
               <Chip
                 label={item.label}
-                style={{ background: item.stroke, opacity: item.attr ? 0.5 : 1}}
+                style={{ background: item.stroke, opacity: item.attr ? 0.5 : 1 }}
                 onClick={() => hideShowLine(item.lineClass, item.stroke, item.attr, item.cb)}
                 deleteIcon={
                   <PanoramaFishEyeRounded />}
