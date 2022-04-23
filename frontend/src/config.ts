@@ -9,4 +9,4 @@ export const YEARN_VAULT = '0x7de5c945692858cef922dad3979a1b8bfa77a9b4'
 export const LEVERAGE_FACTOR = 2
 export const UNI_V2_USDC_ADAPTER = '0x37c61fD2AFE4134d6020188C59Efdea3d143e28a'
 export const WETH_ADDRESS = '0xd0A1E359811322d97991E03f863a0C30C2cF029C'
-
+export const API_BASE_PATH = 'http://127.0.0.1:5000/api/v1/backtest/symbol'
