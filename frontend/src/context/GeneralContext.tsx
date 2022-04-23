@@ -7,7 +7,7 @@ import { AbiItem } from "web3-utils";
 declare var window: any
 
 export function GeneralContextProvider(props: any) {
-    const web3 = new Web3("https://eth-kovan.alchemyapi.io/v2/3eFnaqQhXc6AS9oQ6UQBh3j1wUt6-msV")
+    const web3 = new Web3("http://localhost:8545")
 
     const ctx = {
         test: () => alert("ctx is ok"),
@@ -56,25 +56,20 @@ export function GeneralContextProvider(props: any) {
                 to: '0xE94Bd373eB4e095E5b3AfAe7495f9cc6474b2FB9',
                 data: tx.encodeABI()
               })
-              console.log(gas)
+              console.log("gas",gas)
 
-            const baseFee = await web3.eth.getBlock("pending");
-            console.log('baseFee', baseFee)
-            console.log('gasPrice', await web3.eth.getGasPrice())
-            console.log('chainId', await web3.eth.getChainId())
+            // const baseFee = await web3.eth.getBlock("pending");
+            // console.log('baseFee', baseFee)
+            // console.log('gasPrice', await web3.eth.getGasPrice())
+            // console.log('chainId', await web3.eth.getChainId())
             const transactionParameters = {
-                // nonce: '0x00', // ignored by MetaMask
-                // gasPrice: await web3.eth.getGasPrice(), // customizable by user during MetaMask confirmation. // 1500000007
                 gas: String(gas), // customizable by user during MetaMask confirmation.
-                to: '0xc2F72616EDef0C22D7CB3E60Ab085dA56566FeA4', // Required except during contract publications.
+                to: '0x6dDFFB72e5b805629E8375De6a5E0Da1c3a0854A', // Required except during contract publications.
                 from: '0xE94Bd373eB4e095E5b3AfAe7495f9cc6474b2FB9', // must match user's active address.
-                // value: '0x00', // Only required to send ether to the recipient from the initiating external account.
                 data: tx.encodeABI(), // Optional, but used for defining smart contract creation and interaction.
-                // chainId: await web3.eth.getChainId(), // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask. //
-                // gas: String(Number(await web3.eth.getGasPrice()) * 1.05),
-                // gasPrice: String(Number(await web3.eth.getGasPrice())),
-                // gasLimit: String(Number(await web3.eth.getGasPrice()) * 1.05),
             };
+
+
 
             // txHash is a hex string
             // As with any RPC call, it may throw an error
@@ -82,8 +77,16 @@ export function GeneralContextProvider(props: any) {
                 method: 'eth_sendTransaction',
                 params: [transactionParameters],
             });
-
             console.log("txHash", txHash)
+
+            // const signAndSendTransaction = async (tx) => {
+                // const signedTx = await web3.eth.accounts.signTransaction(tx, privateKey);
+                // console.log("SENDED TRANSACTION!!")
+                // console.log(signedTx.rawTransaction)
+                // return web3.eth.sendSignedTransaction(signedTx.raw || signedTx.rawTransaction)
+            // // }
+
+            // console.log("txHash", txHash)
 
 
         }
