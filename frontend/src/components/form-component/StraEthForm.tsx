@@ -20,7 +20,7 @@ function StraEthForm() {
 
   const handleSetTimeframe = (v: any) => {
     const tframe = timeframeMarks.filter((item: any) => item.value === v)[0].timeFrame
-    context.setTimeFrame(tframe)
+    context.setTimeFrameBacktest(tframe)
   }
   const handleSetLeverageFactor = (v: any) => {
     const lev = leverageFactorMarks.filter((item: any) => item.value === v)[0].leverage
@@ -48,7 +48,7 @@ function StraEthForm() {
             label="Age"
             onChange={(e: any) => {
               setAsset(e.target.value)
-              context.setBacktestAsset(ASSET_NAMES[e.target.value])
+              context.setAssetBacktest(ASSET_NAMES[e.target.value])
             }}
           >
 
@@ -83,7 +83,7 @@ function StraEthForm() {
           InputLabelProps={{
             shrink: true,
           }}
-          onChange={(e: any) => context.setBacktestDate(e.target.value)}
+          onChange={(e: any) => context.setDateBacktest(e.target.value)}
         />
       </div>
 

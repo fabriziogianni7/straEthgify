@@ -4,19 +4,17 @@ import ZoomableLineChart from './zoomableLineChart';
 import { Fetcher } from '../../api/Fetcher';
 import { GeneralContext } from '../../context';
 
-
 function StraEthChart() {
-
   const context = useContext(GeneralContext)
-
 
   const [benchmark, setBenchmark] = useState()
   const [firstStrategy, setFirstStrategy] = useState()
   const [secondStrategy, setSecondStrategy] = useState()
 
   useEffect(() => {
+    console.log(context.assetBacktest)
     Fetcher({
-      "asset": "bitcoin",
+      "asset": context.assetBacktest,
       "startingBalance": 10000,
       "period": 100,
       "startingDate": "01/01/2019"
@@ -34,7 +32,6 @@ function StraEthChart() {
     context.windowSize,
     context.assetBacktest
   ]);
-
 
   return <div className="chart-group">
     <ZoomableLineChart
