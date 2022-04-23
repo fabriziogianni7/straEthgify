@@ -1,0 +1,31 @@
+.navbar{
+  position:relative;
+  color:#902abe;
+  background-color: #74929e;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height:10vh;
+  padding: 0 1vh 0 1vh
+}
+
+.footer{
+  position:relative;
+  color:#902abe;
+  background-color: #74929e;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height:10vh;
+  /* padding-bottom: 10px; */
+}
+
+.team{
+  color:lightgreen;
+  /* padding:0 5px 1px 10px */
+
+}
+
+.brand-name{
+  padding-right:10px
+}

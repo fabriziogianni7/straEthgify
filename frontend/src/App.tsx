@@ -1,25 +1,23 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import StraEthForm from './components/form-component/StraEthForm';
+import StraEthChart from './components/linechart-component/StraEthChart';
+import StraFooter from './components/navbar-component/StraFooter';
+import StraNavbar from './components/navbar-component/StraNavbar';
+import { GeneralContextProvider } from './context/GeneralContext';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <GeneralContextProvider>
+      <StraNavbar />
+      <div className="App">
+        <StraEthForm />
+        <div>
+          <StraEthChart />
+        </div>
+      </div>
+      <StraFooter/>
+    </GeneralContextProvider>
   );
 }
 

@@ -1,0 +1,49 @@
+.chart-group{
+  display:flex;
+  flex-direction: column;
+  background-color: white;
+  width: 100vh;
+  height: 95vh;
+}
+
+.chip-container{
+  display: flex;
+  padding: 0 10px 0 10px;
+}
+
+#zoomable-svg {
+  display: block;
+  width: 100%;
+  height: 400px;
+  overflow: visible;
+}
+
+svg rect.selection {
+  stroke: none;
+}
+
+.x-axis .y-axis {
+  z-index: -1;
+}
+.x-axis line {
+  stroke: #ddd;
+  color: #ddd;
+}
+.x-axis path {
+  stroke: #ddd;
+  color: #ddd;
+}
+
+.y-axis line {
+  stroke: #ddd;
+  color: #ddd;
+}
+.y-axis path {
+  stroke: #ddd;
+  color: #ddd;
+}
+
+.chart-container{
+  display: block;
+  width: 60%
+}

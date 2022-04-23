@@ -1,0 +1,23 @@
+.form-group{
+  display:flex;
+  flex-direction: column;
+  background-color: rgba(255, 255, 255, 0.932);
+  width: 50vh;
+  height: 90vh;
+  padding: 20px
+}
+
+.form-component{
+  padding:10px;
+  color: rgba(0, 0, 0, 0.267);
+  text-align: left;
+}
+
+#test-strategy-button{
+  background-color: #0e384b;
+  color:lightblue
+}
+#deploy-strategy-button{
+  background-color: #48829c;
+  color:lightblue
+}
