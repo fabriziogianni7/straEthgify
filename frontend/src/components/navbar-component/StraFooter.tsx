@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from "react";
 import './css/StraNavbar.css'
 import { Avatar, Button, Link, Typography } from '@material-ui/core'
 
-import { GeneralContext } from '../../context';
 import { AvatarGroup } from "@mui/material";
 
 function StraFooter() {
