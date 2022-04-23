@@ -4,7 +4,19 @@ export const GeneralContext = React.createContext({
     test: () => {},
     callTestStrategy: async (testParams:any)=>{},
     callDeployStrategy: async (params: any)=>{},
-    checkWeb3Provider: () =>{},
+    checkMetamask: () =>{},
     connectMetamask: async () =>{},
-    accountConnected: '' as string
+    accountConnected: '' as string,
+    strategyManagerContract:()=> {},
+    createStrategy: async (
+        creditManagerAddress:any,
+        timeframe:any,
+        windowSize:any,
+        usdcAmount:any,
+        usdcAddress:any,
+        wethAddress:any,
+        uniV2UsdcAdapter:any,
+        yearnVault:any,
+        leverageFactor:any,
+        )=> {}
 })

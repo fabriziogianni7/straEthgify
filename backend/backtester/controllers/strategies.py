@@ -52,12 +52,19 @@ def backtest_single_asset(asset, starting_balance, start_date, period):
     df_prices['date'] = df_prices['date'].apply(
         lambda x: x.strftime('%Y-%m-%d'))
 
+    df_strategy = df_prices[['date', 'strategy']]
+    df_strategy.rename(columns = {'strategy':'value'}, inplace = True)
+    df_benchmark = df_prices[['date', 'benchmark']]
+    df_benchmark.rename(columns = {'benchmark':'value'}, inplace = True)
+    df_strategyWYearn = df_prices[['date', 'strategyWYearn']]
+    df_strategyWYearn.rename(columns = {'strategyWYearn':'value'}, inplace = True)
+
     return {
         "benchmarkReturn": benckmark_return,
         "benchmarkMaxDrawdown": benckmark_max_drawdown,
         "strategyReturn": strategy_return,
         "strategyMaxDrawdown": strategy_max_drawdown,
-        "strategy": df_prices[['date', 'strategy']].to_dict(orient='records'),
-        "benchmark": df_prices[['date', 'benchmark']].to_dict(orient='records'),
-        "strategyWithYearn": df_prices[['date', 'strategyWYearn']].to_dict(orient='records')
+        "strategy": df_strategy[['date', 'value']].to_dict(orient='records'),
+        "benchmark": df_benchmark[['date', 'value']].to_dict(orient='records'),
+        "strategyWithYearn": df_strategyWYearn[['date', 'value']].to_dict(orient='records')
     }

@@ -6,6 +6,7 @@ import {
   axisBottom,
   axisLeft,
   zoom,
+  timeFormat
 } from "d3";
 import useResizeObserver from "./useResizeObserver";
 import './css/StraEthChart.css'
@@ -47,9 +48,14 @@ function ZoomableLineChart({
   // will be called initially and on every benchmark change
   useEffect(() => {
     if (!benchmark) return
+
+    const formatTime = timeFormat("%B %d, %Y");
+    formatTime(new Date); // "June 30, 2015"
+
     const svg = select(svgRef.current || '');
     const benchmarkValues = benchmark.map((val: any) => val.value)
-    const dates = benchmark.map((val: any) => val.date)
+    const dates = benchmark.map((val: any) => formatTime(new Date(val.date)))
+    console.log(dates)
     const firstStrategyValues = firstStrategy?.map((val: any) => val.value)
     const secondStrategyValues = secondStrategy?.map((val: any) => val.value * 0.5)
     const thirdStrategyValues = thirdStrategy?.map((val: any) => val.value * -1.5)
@@ -99,6 +105,11 @@ function ZoomableLineChart({
         .attr("fill", "none")
         .attr("d", lineGenerator);
     }
+
+    firstStrategy = null
+    secondStrategy = null
+    thirdStrategy = null
+
 
     if (firstStrategy && !hideFirstStrategy) {
       svgContent
@@ -193,14 +204,14 @@ function ZoomableLineChart({
 
   return (
     <div style={{ position: 'relative', padding: "4vh" }}>
-      <Typography variant="h5" style={{textAlign:"left"}} color='primary'>Show/hide strategy</Typography>
+      <Typography variant="h5" style={{ textAlign: "left" }} color='primary'>Show/hide strategy</Typography>
       <div style={{ display: 'flex', flexDirection: 'row', paddingTop: "4vh" }}>
         {
           labelsStrokesClasses.map(item =>
             <div className='chip-container' >
               <Chip
                 label={item.label}
-                style={{ background: item.stroke, opacity: item.attr ? 0.5 : 1}}
+                style={{ background: item.stroke, opacity: item.attr ? 0.5 : 1 }}
                 onClick={() => hideShowLine(item.lineClass, item.stroke, item.attr, item.cb)}
                 deleteIcon={
                   <PanoramaFishEyeRounded />}
