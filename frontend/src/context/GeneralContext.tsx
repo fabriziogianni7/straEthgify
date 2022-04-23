@@ -146,12 +146,6 @@ export function GeneralContextProvider(props: any) {
     useMemo(async () => {
         await ctx.getAccounts()
         await ctx.getCreditAccountData()
-
-
-        // console.log("ABI", strategyManagerJson.abi)
-
-        // console.log("strategyManagerContract",strategyManagerContract)
-        // ctx.strategyManagerContract = strategyManagerContract
     }, [])
 
 
