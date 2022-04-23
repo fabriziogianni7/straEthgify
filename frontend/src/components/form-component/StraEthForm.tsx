@@ -40,7 +40,7 @@ function StraEthForm() {
 
         {/* asset */}
         <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-asset-label">Select Asset</InputLabel>
+          <InputLabel id="demo-simple-select-asset-label">Select Risky Asset to Test the Strategy</InputLabel>
           <Select
             labelId="select-asset-label"
             id="select-asset"
@@ -63,10 +63,10 @@ function StraEthForm() {
         <TextField
           fullWidth
           id="outlined-basic"
-          label="Amount"
+          label="Amount To Invest in USDC"
           variant="outlined"
           type='number'
-          defaultValue={10000}
+          defaultValue={10}
           onChange={(e) => {
             const val = Number(e.target.value)
             context.setAssetAmount(val)
@@ -96,7 +96,7 @@ function StraEthForm() {
       <div className='form-component'>
 
         <Typography id="input-slider" >
-          Timeframe
+          Rebalance Interval
         </Typography>
         <Slider
           aria-label="timeframe"
@@ -130,7 +130,7 @@ function StraEthForm() {
       {/* window size */}
       <div className='form-component'>
         <Typography id="input-slider" >
-          Window Size
+          Moving Average Size
         </Typography>
         <Slider
           aria-label="window-size"
@@ -152,15 +152,6 @@ function StraEthForm() {
           id='deploy-strategy-button'
           size="medium"
           color='primary'
-          // onClick={async () => console.log(CREDIT_MANAGER_ADDRESS_USDC,
-          //   context.timeFrameBacktest,
-          //   context.windowSize,
-          //   context.assetAmount * 1000000,
-          //   USDC_ADDRESS,
-          //   asset,
-          //   UNI_V2_USDC_ADAPTER,
-          //   YEARN_VAULT,
-          //   context.leverageFactor)}
           onClick={async () => await context.createStrategy(CREDIT_MANAGER_ADDRESS_USDC,
             context.timeFrameBacktest,
             context.windowSize,
