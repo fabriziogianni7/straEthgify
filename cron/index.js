@@ -3,9 +3,10 @@ import { ethers } from "ethers";
 import { addressToAsset } from './config.js';
 import abiJson from './StrategyManager.json'
 
-const contractAddress = process.env.contractAddress || '0x53B551F2d4eC25e566de1D174509df3F7baB6c51'
-const provider = new ethers.providers.JsonRpcProvider();
-const signer = provider.getSigner();
+const contractAddress = process.env.contractAddress || '0x95b177facB33f81bddfDE6e9376F11d001bC726e'
+const provider = new ethers.providers.JsonRpcProvider('https://eth-kovan.alchemyapi.io/v2/3eFnaqQhXc6AS9oQ6UQBh3j1wUt6-msV');
+const wallet = new ethers.Wallet('0xe9b0203362f1a7c35310a7f4e566f247a9f17b335447fe599dfa848c1f00e376', provider);
+const signer = wallet.provider.getSigner(wallet.address);
 
 const strategyContract = new ethers.Contract(contractAddress, abiJson.abi, signer);
 const users = await strategyContract.getAllUsers()
